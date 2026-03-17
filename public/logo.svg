@@ -1,0 +1,33 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Minimalist pastel bowl of Vietnamese Sweet Soup (Chè) -->
+  
+  <!-- Shadow under the bowl -->
+  <ellipse cx="200" cy="310" rx="120" ry="20" fill="#EAE0D5" opacity="0.6"/>
+  
+  <!-- The Bowl -->
+  <!-- Bowl Base (Outer) -->
+  <path d="M70 200 C70 300 120 310 200 310 C280 310 330 300 330 200 Z" fill="#FFFFFF" stroke="#F48FB1" stroke-width="12" stroke-linejoin="round"/>
+  <!-- Bowl Inner Rim -->
+  <ellipse cx="200" cy="200" rx="130" ry="35" fill="#FFE082" stroke="#FFFFFF" stroke-width="8"/>
+  
+  <!-- Sweet Soup Ingredients inside the bowl -->
+  <!-- Milky Coconut Base -->
+  <ellipse cx="200" cy="205" rx="115" ry="25" fill="#FFF5E1" opacity="0.9"/>
+  
+  <!-- Jelly / Pearls (Trân Châu / Thạch) -->
+  <circle cx="160" cy="215" r="15" fill="#F48FB1"/>
+  <circle cx="210" cy="210" r="18" fill="#81D4FA"/>
+  <circle cx="240" cy="225" r="12" fill="#FFAB91"/>
+  <circle cx="130" cy="195" r="14" fill="#A5D6A7"/>
+  <circle cx="260" cy="190" r="16" fill="#CE93D8"/>
+  
+  <!-- A spoon dipping into the bowl -->
+  <path d="M250 120 L220 190 C215 200 205 200 200 195 C195 190 195 180 205 170 L240 110" fill="none" stroke="#D7CCC8" stroke-width="14" stroke-linecap="round"/>
+  <!-- Spoon bowl part -->
+  <ellipse cx="200" cy="195" rx="18" ry="12" fill="#D7CCC8" transform="rotate(-30 200 195)"/>
+  
+  <!-- Cute little sparkle/steam -->
+  <path d="M120 140 Q130 110 110 80" fill="none" stroke="#F48FB1" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <path d="M150 110 Q160 80 140 50" fill="none" stroke="#81D4FA" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+
+</svg>

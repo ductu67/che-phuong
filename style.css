@@ -74,8 +74,17 @@ a { text-decoration: none; color: inherit; }
   font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   color: var(--accent-color);
+}
+
+.logo-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%; /* Using 50% for the cute circle bowl logo */
+  object-fit: contain;
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--accent-color) 40%, transparent);
+  background-color: white; /* Contrast against nav background */
 }
 
 .nav-links {
@@ -230,6 +239,8 @@ a { text-decoration: none; color: inherit; }
   transition: var(--transition);
   cursor: pointer;
   border: 1px solid color-mix(in srgb, var(--text-color) 5%, transparent);
+  display: flex;
+  flex-direction: column;
 }
 
 .card:hover {
@@ -250,6 +261,42 @@ a { text-decoration: none; color: inherit; }
 
 .card-content {
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-content h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: var(--heading-color);
+}
+
+.card-content p {
+  color: var(--text-color);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.order-btn {
+  margin-top: auto;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--card-bg);
+  color: var(--accent-color) !important;
+  border: 2px solid var(--accent-color);
+  border-radius: 2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  transition: var(--transition);
+  text-align: center;
+  justify-content: center;
+}
+
+.order-btn:hover {
+  background-color: var(--accent-color);
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--accent-color) 40%, transparent);
 }
 
 /* Mock images replaced with actual images */
@@ -285,12 +332,80 @@ a { text-decoration: none; color: inherit; }
 }
 
 .mock-img-placeholder::after {
-  content: attr(data-placeholder);
+  content: "Mockup: " attr(data-placeholder); /* Hển thị nội dung từ attribute */
   font-weight: 700;
   font-size: 1.5rem;
   color: color-mix(in srgb, var(--accent-color) 40%, transparent);
   opacity: 0.5;
   transform: rotate(-15deg);
+}
+
+/* Reviews Section */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.review-card {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  text-align: left;
+  position: relative;
+  transition: var(--transition);
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px color-mix(in srgb, var(--text-color) 10%, transparent);
+}
+
+.review-card::before {
+  content: '"';
+  font-size: 4rem;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  color: color-mix(in srgb, var(--accent-color) 20%, transparent);
+  font-family: serif;
+}
+
+.review-text {
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.reviewer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.reviewer-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.reviewer-info h4 {
+  margin-bottom: 0.2rem;
+  color: var(--heading-color);
+}
+
+.reviewer-info span {
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--text-color) 70%, transparent);
 }
 
 /* Footer */
@@ -307,9 +422,18 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   color: var(--accent-color);
   margin-bottom: 1rem;
+}
+
+.footer-logo-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: contain;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-color) 40%, transparent);
+  background-color: white;
 }
 
 .contact-info {
