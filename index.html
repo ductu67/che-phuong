@@ -39,13 +39,21 @@
             <li><a href="#traditional">Chè Truyền Thống</a></li>
             <li><a href="#yogurt">Sữa Chua</a></li>
             <li><a href="#drinks">Đồ Uống</a></li>
-            <li><a href="#footer" class="nav-contact-btn">Liên hệ</a></li>
+            <li><button class="nav-cart-btn" id="nav-cart-btn"><i class="ph ph-shopping-bag"></i> Giỏ hàng <span class="badgen">0</span></button></li>
         </ul>
         <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
             <i class="ph ph-moon"></i>
         </button>
     </nav>
 
+    
+    <div class="sticky-cat-nav" id="sticky-cat-nav">
+        <a href="#modern" class="cat-link active">Hiện Đại</a>
+        <a href="#traditional" class="cat-link">Truyền Thống</a>
+        <a href="#yogurt" class="cat-link">Sữa Chua</a>
+        <a href="#drinks" class="cat-link">Đồ Uống</a>
+        <a href="#gallery" class="cat-link">Góc Sống Ảo</a>
+    </div>
     <main>
         <section id="hero" class="hero section reveal">
             <div class="hero-content">
@@ -72,8 +80,7 @@
                     <div class="card-content">
                         <h3>Chè Sầu Riêng</h3>
                         <p>Sầu riêng tươi xay nhuyễn, thạch dai giòn kết hợp nước cốt dừa thơm béo, vị ngọt thanh dễ chịu.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Chè Sầu Riêng"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -81,8 +88,7 @@
                     <div class="card-content">
                         <h3>Chè Xoài Hồng Kông</h3>
                         <p>Xoài cát chín tự nhiên, trân châu trắng và cốt dừa mang lại hương vị ngọt dịu thanh mát.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Chè Xoài Hồng Kông"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -100,8 +106,7 @@
                     <div class="card-content">
                         <h3>Chè Khoai Dẻo</h3>
                         <p>Khoai lang tím, vàng dẻo bùi xắt hạt lựu hòa quyện vị thanh mát cốt dừa.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Chè Khoai Dẻo"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -109,8 +114,7 @@
                     <div class="card-content">
                         <h3>Chè Khúc Bạch Nhãn</h3>
                         <p>Những viên khúc bạch phô mai mềm tan cùng độ ngọt thanh của nhãn lồng giòn sần sật.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Chè Khúc Bạch Nhãn"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -118,8 +122,7 @@
                     <div class="card-content">
                         <h3>Chè Dừa Non</h3>
                         <p>Nước cốt dừa thơm, thạch lá dứa núng nính, và sợi dừa non sần sật ít ngọt.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Chè Dừa Non"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -127,8 +130,7 @@
                     <div class="card-content">
                         <h3>Chè Bơ</h3>
                         <p>Bơ dằm béo xốp kết hợp thạch phô mai và sữa tươi thanh nhẹ.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Chè Bơ"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -136,8 +138,7 @@
                     <div class="card-content">
                         <h3>Sương Sáo Trân Châu Cốt Dừa</h3>
                         <p>Sương sáo thanh mát đen nhánh, trân châu dẻo bùi kết hợp cốt dừa.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Sương Sáo Trân Châu Cốt Dừa"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
             </div>
@@ -155,8 +156,7 @@
                     <div class="card-content">
                         <h3>Chè Thập Cẩm</h3>
                         <p>Tuyển tập đậu đỏ, đậu đen, thạch đen, dừa khô quyện bùi và nước cốt mộc mạc.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Chè Thập Cẩm"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -164,8 +164,7 @@
                     <div class="card-content">
                         <h3>Chè Bưởi</h3>
                         <p>Cùi bưởi giòn sần sật, dẻo quẹo đậu xanh đánh nhuyễn mịn màng.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Chè Bưởi"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -173,8 +172,7 @@
                     <div class="card-content">
                         <h3>Chè Đỗ Đen Trân Châu Dừa</h3>
                         <p>Đỗ đen hầm nhừ ngọt thanh ăn kèm trân châu bọc dừa tươi dai sần sật.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Chè Đỗ Đen Trân Châu Dừa"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -182,8 +180,7 @@
                     <div class="card-content">
                         <h3>Chè Ngô Dừa Non</h3>
                         <p>Ngô luộc dẻo mềm, cốt dừa thơm lừng, giữ trọn vị ngọt tự nhiên của ngô non.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Chè Ngô Dừa Non"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -191,8 +188,7 @@
                     <div class="card-content">
                         <h3>Chè Cốm Dừa Non</h3>
                         <p>Hương cốm xanh thoang thoảng mùa thu Hà Nội, quấn quýt cùng dừa non thanh tao.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Chè Cốm Dừa Non"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
             </div>
@@ -208,8 +204,7 @@
                     <div class="card-content">
                         <h3>Sữa Chua Mít</h3>
                         <p>Mít vàng dai giòn thơm tự nhiên, thạch sương sáo thanh mát trộn sữa chua chua dịu.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Sữa Chua Mít"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -217,8 +212,7 @@
                     <div class="card-content">
                         <h3>Sữa Chua Nếp Cẩm</h3>
                         <p>Nếp cẩm ủ men thơm nồng bùi bùi, ăn kèm sữa chua thanh mát ít ngọt.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Sữa Chua Nếp Cẩm"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -236,8 +230,7 @@
                     <div class="card-content">
                         <h3>Sữa Chua Trân Châu</h3>
                         <p>Trân châu trắng giòn và trân châu đen dẻo bùi trong sốt sữa chua thanh dịu.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Sữa Chua Trân Châu"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
             </div>
@@ -254,8 +247,7 @@
                     <div class="card-content">
                         <h3>Matcha Latte</h3>
                         <p>Trà xanh Nhật Bản đậm vị chan lẫn sữa tươi thơm béo và bọt kem mịn màng.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Matcha Latte"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -263,8 +255,7 @@
                     <div class="card-content">
                         <h3>Trà Quất Nha Đam</h3>
                         <p>Vị chua thanh của quất hòa với nha đam giòn tan, thanh mát giải nhiệt mùa hè.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Trà Quất Nha Đam"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -272,8 +263,7 @@
                     <div class="card-content">
                         <h3>Trà Chanh</h3>
                         <p>Hương vị trà đen nguyên bản kết hợp chanh tươi mộc mạc và sảng khoái.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Trà Chanh"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -281,8 +271,7 @@
                     <div class="card-content">
                         <h3>Trà Tắc Xí Muội</h3>
                         <p>Trà ủ sậm màu với tắc thơm lừng thêm viên xí muội mặn mặn chua chua độc đáo.</p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Trà Tắc Xí Muội"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
             </div>
@@ -326,7 +315,52 @@
                 </div>
             </div>
         </section>
+    
+        <section id="gallery" class="section reveal gallery-section">
+            <div class="section-header">
+                <h2>Góc Sống Ảo</h2>
+                <p>Những khoảnh khắc chill chill và chân thực nhất tại tiệm chụp bởi chính các bạn.</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=600&q=80" alt="Không gian quán" loading="lazy"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80" alt="Góc chill" loading="lazy"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80" alt="Cafe dạo" loading="lazy"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1623934390635-f0952d7eaba8?auto=format&fit=crop&w=600&q=80" alt="Ly matcha" loading="lazy"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1505253818617-bdf242dd8371?auto=format&fit=crop&w=600&q=80" alt="Bạn bè" loading="lazy"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1525048866160-b6058e5744cb?auto=format&fit=crop&w=600&q=80" alt="Bàn nước nhỏ" loading="lazy"></div>
+            </div>
+        </section>
     </main>
+
+    <!-- Shopping Cart UI Floating Button (Mobile) -->
+    <div class="cart-floating-btn" id="cart-floating-btn">
+        <i class="ph ph-shopping-bag"></i>
+        <span class="cart-badge" id="cart-badge">0</span>
+    </div>
+
+    <!-- Background Overlay -->
+    <div class="cart-modal-overlay" id="cart-overlay"></div>
+    
+    <!-- Cart Modal Sidebar -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-header">
+            <h3>Giỏ hàng của bạn</h3>
+            <button class="close-cart" id="close-cart" aria-label="Close cart"><i class="ph ph-x"></i></button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Items injected via JS -->
+            <p class="empty-cart-msg">Giỏ hàng đang trống.</p>
+        </div>
+        <div class="cart-footer">
+            <button class="btn btn-primary cart-checkout-btn" id="checkout-btn" disabled>
+                <i class="ph ph-paper-plane-right"></i> Gửi đơn qua Fanpage
+            </button>
+            <p class="checkout-hint">Web sẽ tự động chép danh sách và mở Messenger để bạn dán (paste) rẹt rẹt!</p>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Đã thêm vào giỏ!</div>
 
     <footer id="footer" class="footer reveal">
         <div class="footer-content">
