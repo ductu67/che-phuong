@@ -356,6 +356,8 @@ a { text-decoration: none; color: inherit; }
   text-align: left;
   position: relative;
   transition: var(--transition);
+  display: flex;
+  flex-direction: column;
 }
 
 .review-card:hover {
@@ -383,6 +385,7 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   align-items: center;
   gap: 1rem;
+  margin-top: auto;
 }
 
 .reviewer-avatar {
