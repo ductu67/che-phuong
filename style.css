@@ -547,7 +547,7 @@ a { text-decoration: none; color: inherit; }
   background: color-mix(in srgb, var(--bg-color) 90%, transparent);
   backdrop-filter: blur(10px);
   z-index: 90;
-  display: flex;
+  display: none; /* Hidden on desktop */
   overflow-x: auto;
   padding: 0.8rem 1rem;
   gap: 1rem;
@@ -766,5 +766,5 @@ a { text-decoration: none; color: inherit; }
 
 @media (max-width: 768px) {
   .cart-floating-btn { bottom: 20px; right: 20px; width: 55px; height: 55px; }
-  .sticky-cat-nav { top: 60px; }
+  .sticky-cat-nav { display: flex; top: 60px; }
 }
