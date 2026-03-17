@@ -52,7 +52,7 @@
         <a href="#traditional" class="cat-link">Truyền Thống</a>
         <a href="#yogurt" class="cat-link">Sữa Chua</a>
         <a href="#drinks" class="cat-link">Đồ Uống</a>
-        <a href="#gallery" class="cat-link">Góc Sống Ảo</a>
+        <!-- <a href="#gallery" class="cat-link">Góc Sống Ảo</a> -->
     </div>
     <main>
         <section id="hero" class="hero section reveal">
@@ -97,8 +97,7 @@
                         <h3>Chè Ngọc Thạch</h3>
                         <p>Các loại thạch rực rỡ, dai dai giòn giòn cùng nước dùng sữa dừa phảng phất hương hoa bưởi.
                         </p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Chè Ngọc Thạch"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -221,8 +220,7 @@
                         <h3>Sữa Chua Hoa Quả</h3>
                         <p>Trái cây tươi theo mùa cắt hạt lựu hòa mình trong lớp sữa chua chua ngọt đánh thức vị giác.
                         </p>
-                        <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="btn order-btn">Đặt qua
-                            Fanpage</a>
+                        <button class="btn order-btn add-to-cart-btn" data-name="Sữa Chua Hoa Quả"><i class="ph ph-shopping-cart"></i> Thêm vào giỏ</button>
                     </div>
                 </div>
                 <div class="card reveal-card">
@@ -316,7 +314,7 @@
             </div>
         </section>
     
-        <section id="gallery" class="section reveal gallery-section">
+        <section id="gallery" class="section reveal gallery-section" style="display: none;">
             <div class="section-header">
                 <h2>Góc Sống Ảo</h2>
                 <p>Những khoảnh khắc chill chill và chân thực nhất tại tiệm chụp bởi chính các bạn.</p>
@@ -362,6 +360,13 @@
     <!-- Toast Notification -->
     <div id="toast" class="toast">Đã thêm vào giỏ!</div>
 
+    
+    <!-- Image Zoom Lightbox -->
+    <div class="image-lightbox" id="image-lightbox">
+        <button class="close-lightbox" id="close-lightbox"><i class="ph ph-x"></i></button>
+        <img src="" alt="Phóng to" id="lightbox-img" class="lightbox-img">
+    </div>
+    
     <footer id="footer" class="footer reveal">
         <div class="footer-content">
             <div class="footer-logo">

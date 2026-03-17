@@ -242,4 +242,46 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+
+    // ==========================================
+    // Image Zoom (Lightbox)
+    // ==========================================
+    const lightbox = document.getElementById('image-lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeLightboxBtn = document.getElementById('close-lightbox');
+    
+    // Convert background-image url to src
+    function extractImgUrl(element) {
+        const style = window.getComputedStyle(element);
+        const bgInput = style.backgroundImage;
+        if (bgInput && bgInput !== 'none') {
+            return bgInput.replace(/^url(['"]?/, '').replace(/['"]?)$/, '');
+        }
+        return null;
+    }
+
+    document.querySelectorAll('.card-img').forEach(imgDiv => {
+        imgDiv.addEventListener('click', (e) => {
+            const url = extractImgUrl(imgDiv);
+            if (url) {
+                lightboxImg.src = url;
+                lightbox.classList.add('active');
+            }
+        });
+    });
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        setTimeout(() => lightboxImg.src = '', 300); // clear after animation
+    }
+
+    if (closeLightboxBtn) closeLightboxBtn.addEventListener('click', closeLightbox);
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+    }
+
 });
