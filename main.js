@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const style = window.getComputedStyle(element);
         const bgInput = style.backgroundImage;
         if (bgInput && bgInput !== 'none') {
-            return bgInput.replace(/^url(['"]?/, '').replace(/['"]?)$/, '');
+            return bgInput.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
         }
         return null;
     }
