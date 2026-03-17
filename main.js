@@ -284,4 +284,71 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
+    // ==========================================
+    // Live Status Badge
+    // ==========================================
+    function updateShopStatus() {
+        const statusBadge = document.getElementById('status-badge');
+        if (!statusBadge) return;
+
+        const now = new Date();
+        const hour = now.getHours();
+        
+        // Open from 8:00 to 22:00
+        if (hour >= 8 && hour < 22) {
+            statusBadge.textContent = 'Đang mở cửa';
+            statusBadge.className = 'status-badge status-open';
+        } else {
+            statusBadge.textContent = 'Quán đã nghỉ';
+            statusBadge.className = 'status-badge status-closed';
+        }
+    }
+    updateShopStatus();
+    setInterval(updateShopStatus, 60000); // Update every minute
+
+    // ==========================================
+    // Fly to Cart Animation
+    // ==========================================
+    function createFlyingElement(sourceBtn) {
+        const cartIcon = document.querySelector('.nav-cart-btn .ph-shopping-bag') || document.getElementById('nav-cart-btn');
+        if (!cartIcon) return;
+
+        const btnRect = sourceBtn.getBoundingClientRect();
+        const cartRect = cartIcon.getBoundingClientRect();
+
+        const flyer = document.createElement('div');
+        flyer.className = 'flying-item';
+        flyer.innerHTML = '<i class="ph ph-sparkle"></i>';
+        flyer.style.left = `${btnRect.left + btnRect.width / 2 - 20}px`;
+        flyer.style.top = `${btnRect.top + btnRect.height / 2 - 20}px`;
+        document.body.appendChild(flyer);
+
+        // Animate
+        requestAnimationFrame(() => {
+            flyer.style.left = `${cartRect.left + cartRect.width / 2 - 20}px`;
+            flyer.style.top = `${cartRect.top + cartRect.height / 2 - 20}px`;
+            flyer.style.transform = 'scale(0.2) rotate(360deg)';
+            flyer.style.opacity = '0';
+        });
+
+        setTimeout(() => {
+            flyer.remove();
+            // Subtle pop animation for the cart button
+            const navBtn = document.getElementById('nav-cart-btn');
+            if (navBtn) {
+                navBtn.style.transform = 'scale(1.2)';
+                setTimeout(() => navBtn.style.transform = '', 200);
+            }
+        }, 800);
+    }
+
+    // Wrap the existing add-to-cart listener or add to it
+    const originalAddButtons = document.querySelectorAll('.add-to-cart-btn');
+    originalAddButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            createFlyingElement(e.currentTarget);
+        });
+    });
+
 });
