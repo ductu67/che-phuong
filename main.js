@@ -58,29 +58,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // Registered Service Worker for PWA
     // ==========================================
-    /*
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW register error', err));
+            navigator.serviceWorker.register('/sw.js').catch(err => console.warn('SW register error', err));
         });
     }
-    */
 
-    // ==========================================
-    // Sound Effects (Web Audio API)
-    // ==========================================
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // Sound Effects (Web Audio API) - lazy init AudioContext on first interaction
+    let audioCtx = null;
+    function getAudioCtx() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
+    }
     function playClickSound() {
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
+        const ctx = getAudioCtx();
+        if (ctx.state === 'suspended') ctx.resume();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        gain.connect(ctx.destination);
+        osc.frequency.setValueAtTime(800, ctx.currentTime);
+        gain.gain.setValueAtTime(0.05, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.1);
+        osc.stop(ctx.currentTime + 0.1);
     }
     document.addEventListener('click', (e) => {
         if (e.target.closest('button, a, .card-img')) playClickSound();
@@ -258,8 +259,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Real-time Search Filtering
     // ==========================================
     const searchInputs = document.querySelectorAll('.menu-search');
-    const allCards = document.querySelectorAll('.card');
-    
+    // Cache sections and their cards for performance
+    const menuSections = Array.from(document.querySelectorAll('.menu-section')).map(section => ({
+        el: section,
+        cards: Array.from(section.querySelectorAll('.card')).map(card => ({
+            el: card,
+            name: card.querySelector('h3').textContent.toLowerCase(),
+            desc: card.querySelector('p').textContent.toLowerCase()
+        }))
+    }));
     const heroSection = document.getElementById('hero');
     const comboSection = document.getElementById('combos');
 
@@ -282,13 +290,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Scroll to top when searching
             if (term) window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            const sections = document.querySelectorAll('.menu-section');
-            sections.forEach(section => {
-                const cards = section.querySelectorAll('.card');
+            const sections = menuSections;
+            sections.forEach(({ el: section, cards }) => {
                 let sectionHasMatch = false;
-                cards.forEach(card => {
-                    const name = card.querySelector('h3').textContent.toLowerCase();
-                    const desc = card.querySelector('p').textContent.toLowerCase();
+                cards.forEach(({ el: card, name, desc }) => {
                     const matches = !term || name.includes(term) || desc.includes(term);
                     card.style.display = matches ? '' : 'none';
                     if (matches) sectionHasMatch = true;
@@ -388,27 +393,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // Sticky Nav Scroll Spy
+    // Sticky Nav Scroll Spy (debounced with rAF)
     // ==========================================
     const catLinks = document.querySelectorAll('.cat-link');
     const nav = document.getElementById('sticky-cat-nav');
+    const sectionIds = ['modern', 'traditional', 'yogurt', 'drinks'];
+    const spySections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+    let scrollTicking = false;
 
     window.addEventListener('scroll', () => {
-        let current = '';
-        ['modern', 'traditional', 'yogurt', 'drinks'].forEach(id => {
-            const section = document.getElementById(id);
-            if (section && window.pageYOffset >= (section.offsetTop - 200)) current = id;
-        });
-
-        catLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-                if (nav) {
-                    const scrollLeft = link.offsetLeft - nav.offsetWidth / 2 + link.offsetWidth / 2;
-                    nav.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
-                }
-            }
-        });
+        if (!scrollTicking) {
+            requestAnimationFrame(() => {
+                let current = '';
+                spySections.forEach(section => {
+                    if (window.pageYOffset >= section.offsetTop - 200) current = section.id;
+                });
+                catLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                        if (nav) {
+                            const scrollLeft = link.offsetLeft - nav.offsetWidth / 2 + link.offsetWidth / 2;
+                            nav.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
+                        }
+                    }
+                });
+                scrollTicking = false;
+            });
+            scrollTicking = true;
+        }
     });
 });
