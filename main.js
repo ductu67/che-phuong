@@ -321,13 +321,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         orderText += "\nCảm ơn tiệm!";
-        navigator.clipboard.writeText(orderText).then(() => {
+        
+        // Success handler for clipboard
+        const handleSuccess = () => {
             showToast('Đã chép đơn. Mở Messenger...');
-            setTimeout(() => { window.open('https://m.me/phuong.nguyen.298061', '_blank'); }, 1000);
-        }).catch(err => {
+            // On iOS/Safari, window.open in a promise or timeout is often blocked.
+            // window.location.href is more reliable for app redirection.
+            window.location.href = 'https://m.me/phuong.nguyen.298061';
+        };
+
+        // Fallback for clipboard
+        const handleFailure = (err) => {
             console.error('Clipboard error:', err);
-            showToast('Lỗi chép đơn. Vui lòng thử lại!');
-        });
+            showToast('Lỗi chép đơn. Đang mở Messenger...');
+            window.location.href = 'https://m.me/phuong.nguyen.298061';
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(orderText)
+                .then(handleSuccess)
+                .catch(handleFailure);
+        } else {
+            // Fallback for browsers without clipboard API
+            handleSuccess();
+        }
     });
 
     // ==========================================
