@@ -283,6 +283,13 @@ document.addEventListener('DOMContentLoaded', () => {
             orderText += `: ${totalForItem.toLocaleString('vi-VN')}đ\n`;
         });
         orderText += `\nTổng cộng: ${grandTotal.toLocaleString('vi-VN')}đ`;
+        
+        const deliveryNotesInput = document.getElementById('cart-delivery-notes');
+        const notes = deliveryNotesInput ? deliveryNotesInput.value.trim() : '';
+        if (notes) {
+            orderText += `\n\n📝 Ghi chú: ${notes}`;
+        }
+
         orderText += "\nCảm ơn tiệm!";
         navigator.clipboard.writeText(orderText).then(() => {
             showToast('Đã chép đơn. Mở Messenger...');
