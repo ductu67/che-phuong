@@ -41,7 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 revealObserver.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.15 });
+    }, { 
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px' // Trigger slightly before it enters fully
+    });
 
     revealElements.forEach(el => revealObserver.observe(el));
     revealCards.forEach(card => revealObserver.observe(card));
