@@ -13,7 +13,7 @@
 
   /* Shared Variables */
   --font-main: 'Quicksand', sans-serif;
-  --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --border-radius: 24px;
 }
 
@@ -85,7 +85,7 @@ a {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 2000;
   backdrop-filter: blur(10px);
   background: color-mix(in srgb, var(--bg-color) 80%, transparent);
   border-bottom: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
@@ -315,7 +315,8 @@ a {
   color: var(--text-color);
   font-size: 0.95rem;
   margin-bottom: 0.8rem;
-  flex-grow: 1; /* Pushes price and button to the bottom */
+  flex-grow: 1;
+  /* Pushes price and button to the bottom */
 }
 
 .card-price {
@@ -660,6 +661,11 @@ a {
 
   .navbar {
     padding: 0.8rem 3%;
+    background-color: var(--bg-color) !important;
+    /* Force solid background to prevent transparency overlap */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    height: 72px;
+    /* Fixed height for reliable sticky offset on mobile */
   }
 
   .logo {
@@ -721,10 +727,10 @@ a {
 /* 1. Sticky Category Nav (Mobile Overhaul) */
 .sticky-cat-nav {
   position: sticky;
-  top: 65px;
-  /* Stick exactly below header */
-  margin-top: 65px;
-  /* Push below the fixed header in natural flow */
+  top: 72px;
+  /* Stick clearly below header */
+  margin-top: 0;
+  /* We will handle the initial gap in the main container or keep it simple */
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
@@ -735,6 +741,20 @@ a {
   padding: 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+  /* GPU Acceleration to prevent shaking */
+  transform: translateZ(0);
+  will-change: transform, top;
+  backface-visibility: hidden;
+  overflow-anchor: none;
+  border-top: 1px solid color-mix(in srgb, var(--accent-color) 15%, transparent);
+}
+
+@media (max-width: 768px) {
+  .sticky-cat-nav {
+    top: 72px;
+    /* Matches new fixed navbar height */
+    margin-top: 72px;
+  }
 }
 
 .search-wrapper {
@@ -1031,9 +1051,34 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.2rem;
-  font-family: inherit;
-  font-weight: 600;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.clear-cart-container {
+  text-align: right;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
+
+#clear-cart-btn {
+  background: none;
+  border: none;
+  color: color-mix(in srgb, var(--text-color) 40%, transparent);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: var(--transition);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+#clear-cart-btn:hover {
+  color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color) 8%, transparent);
+  text-decoration: none;
 }
 
 .total-amount {

@@ -110,6 +110,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeToppingBtn = document.getElementById('close-topping');
     let pendingItemName = null;
 
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
     function toggleCart() {
         cartModal.classList.toggle('active');
         cartOverlay.classList.toggle('active');
@@ -173,6 +185,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const grandTotalEl = document.getElementById('cart-grand-total');
             if (grandTotalEl) grandTotalEl.textContent = grandTotal.toLocaleString('vi-VN') + 'đ';
             checkoutBtn.disabled = false;
+
+            // Add clear cart button if items exist
+            if (!document.getElementById('clear-cart-btn')) {
+                const clearContainer = document.createElement('div');
+                clearContainer.className = 'clear-cart-container';
+                const clearBtn = document.createElement('button');
+                clearBtn.id = 'clear-cart-btn';
+                clearBtn.textContent = 'Xóa toàn bộ giỏ hàng';
+                clearBtn.addEventListener('click', () => {
+                    if (confirm('Bạn có chắc chắn muốn xóa toàn bộ giỏ hàng?')) {
+                        cart = [];
+                        renderCart();
+                        showToast('Đã xóa giỏ hàng');
+                    }
+                });
+                clearContainer.appendChild(clearBtn);
+                cartItemsContainer.appendChild(clearContainer);
+            }
         }
         const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
         cartBadges.forEach(badge => badge.textContent = totalItems);
@@ -294,6 +324,9 @@ document.addEventListener('DOMContentLoaded', () => {
         navigator.clipboard.writeText(orderText).then(() => {
             showToast('Đã chép đơn. Mở Messenger...');
             setTimeout(() => { window.open('https://m.me/phuong.nguyen.298061', '_blank'); }, 1000);
+        }).catch(err => {
+            console.error('Clipboard error:', err);
+            showToast('Lỗi chép đơn. Vui lòng thử lại!');
         });
     });
 
@@ -313,6 +346,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroSection = document.getElementById('hero');
     const comboSection = document.getElementById('combos');
 
+    const handleSearch = debounce((term) => {
+        // Hide/show hero and combo sections
+        if (heroSection) heroSection.style.display = term ? 'none' : '';
+        if (comboSection) comboSection.style.display = term ? 'none' : '';
+
+        // Toggle compact mode on body
+        document.body.classList.toggle('search-active', !!term);
+
+        // Scroll to top when searching
+        if (term) window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        menuSections.forEach(({ el: section, cards }) => {
+            let sectionHasMatch = false;
+            cards.forEach(({ el: card, name, desc }) => {
+                const matches = !term || name.includes(term) || desc.includes(term);
+                card.style.display = matches ? '' : 'none';
+                if (matches) sectionHasMatch = true;
+            });
+            section.style.display = (!term || sectionHasMatch) ? '' : 'none';
+        });
+    }, 250);
+
     searchInputs.forEach(input => {
         input.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase().trim();
@@ -322,26 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (otherInput !== e.target) otherInput.value = e.target.value;
             });
 
-            // Hide/show hero and combo sections
-            if (heroSection) heroSection.style.display = term ? 'none' : '';
-            if (comboSection) comboSection.style.display = term ? 'none' : '';
-
-            // Toggle compact mode on body
-            document.body.classList.toggle('search-active', !!term);
-
-            // Scroll to top when searching
-            if (term) window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            const sections = menuSections;
-            sections.forEach(({ el: section, cards }) => {
-                let sectionHasMatch = false;
-                cards.forEach(({ el: card, name, desc }) => {
-                    const matches = !term || name.includes(term) || desc.includes(term);
-                    card.style.display = matches ? '' : 'none';
-                    if (matches) sectionHasMatch = true;
-                });
-                section.style.display = (!term || sectionHasMatch) ? '' : 'none';
-            });
+            handleSearch(term);
         });
     });
     // ==========================================
@@ -442,29 +478,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const sectionIds = ['modern', 'traditional', 'yogurt', 'drinks'];
     const spySections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
     let scrollTicking = false;
+    let lastActiveId = '';
 
     window.addEventListener('scroll', () => {
         if (!scrollTicking) {
             requestAnimationFrame(() => {
                 let current = '';
+                const scrollPos = window.scrollY || window.pageYOffset;
+                
                 spySections.forEach(section => {
-                    if (window.pageYOffset >= section.offsetTop - 200) current = section.id;
+                    if (scrollPos >= section.offsetTop - 250) current = section.id;
                 });
-                catLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${current}`) {
-                        link.classList.add('active');
-                        if (nav) {
-                            const scrollLeft = link.offsetLeft - nav.offsetWidth / 2 + link.offsetWidth / 2;
-                            nav.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
+
+                if (current !== lastActiveId) {
+                    lastActiveId = current;
+                    catLinks.forEach(link => {
+                        const href = link.getAttribute('href').substring(1);
+                        if (href === current) {
+                            link.classList.add('active');
+                            if (nav) {
+                                const scrollLeft = link.offsetLeft - nav.offsetWidth / 2 + link.offsetWidth / 2;
+                                nav.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
+                            }
+                        } else {
+                            link.classList.remove('active');
                         }
-                    }
-                });
+                    });
+                }
                 scrollTicking = false;
             });
             scrollTicking = true;
         }
-    });
+    }, { passive: true });
 
     // ==========================================
     // FAQ Accordion
