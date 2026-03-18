@@ -22,7 +22,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff4757">
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
@@ -30,8 +32,11 @@
 <body class="light-mode">
     <nav class="navbar reveal">
         <div class="logo">
-            <img src="/logo.svg" alt="Chè Phương" class="logo-img">
-            <span>Chè Phương</span> <div id="status-badge" class="status-badge"></div>
+            <a href="#hero" style="display: flex; align-items: center; gap: inherit; color: inherit;">
+                <img src="/logo.svg" alt="Chè Phương" class="logo-img">
+                <span>Chè Phương</span>
+            </a>
+            <div id="status-badge" class="status-badge"></div>
         </div>
         <ul class="nav-links">
             <li><a href="#hero">Trang chủ</a></li>
@@ -39,8 +44,12 @@
             <li><a href="#traditional">Chè Truyền Thống</a></li>
             <li><a href="#yogurt">Sữa Chua</a></li>
             <li><a href="#drinks">Đồ Uống</a></li>
-            <li><button class="nav-cart-btn" id="nav-cart-btn"><i class="ph ph-shopping-bag"></i> Giỏ hàng <span class="badgen">0</span></button></li>
+            <li><button class="nav-cart-btn" id="nav-cart-btn"><i class="ph ph-shopping-bag"></i> <span class="cart-text">Giỏ hàng</span> <span class="badgen">0</span></button></li>
         </ul>
+        <div class="search-container desktop-search">
+            <i class="ph ph-magnifying-glass"></i>
+            <input type="text" class="menu-search" placeholder="Tìm món ngon...">
+        </div>
         <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
             <i class="ph ph-moon"></i>
         </button>
@@ -48,11 +57,18 @@
 
     
     <div class="sticky-cat-nav" id="sticky-cat-nav">
-        <a href="#modern" class="cat-link active">Hiện Đại</a>
-        <a href="#traditional" class="cat-link">Truyền Thống</a>
-        <a href="#yogurt" class="cat-link">Sữa Chua</a>
-        <a href="#drinks" class="cat-link">Đồ Uống</a>
-        <!-- <a href="#gallery" class="cat-link">Góc Sống Ảo</a> -->
+        <div class="search-wrapper">
+            <div class="search-container mobile-search">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="text" class="menu-search" placeholder="Tìm món ngon...">
+            </div>
+        </div>
+        <div class="cat-links-wrapper">
+            <a href="#modern" class="cat-link active">Hiện Đại</a>
+            <a href="#traditional" class="cat-link">Truyền Thống</a>
+            <a href="#yogurt" class="cat-link">Sữa Chua</a>
+            <a href="#drinks" class="cat-link">Đồ Uống</a>
+        </div>
     </div>
     <main>
         <section id="hero" class="hero section reveal">
@@ -63,8 +79,7 @@
                 <a href="#modern" class="btn btn-primary">Khám phá Menu <i class="ph ph-arrow-right"></i></a>
             </div>
             <div class="hero-image">
-                <!-- Using a gradient placeholder div for pure CSS vibe -->
-                <div class="blob-image"></div>
+                <img src="/hero.png" alt="Chè Phương - Ngọt Ngào Vị Thảnh Thơi" class="hero-img">
             </div>
         </section>
 
@@ -276,7 +291,7 @@
             </div>
             <div class="cards-grid">
                 <div class="card reveal-card">
-                    <div class="card-img mock-img-placeholder" data-placeholder="Matcha"></div>
+                    <div class="card-img mock-img-matcha"></div>
                     <div class="card-content">
                         <h3>Matcha Latte</h3>
                         <p>Trà xanh Nhật Bản đậm vị chan lẫn sữa tươi thơm béo và bọt kem mịn màng.</p>
@@ -284,7 +299,7 @@
                     </div>
                 </div>
                 <div class="card reveal-card">
-                    <div class="card-img mock-img-placeholder" data-placeholder="Trà Quất"></div>
+                    <div class="card-img mock-img-traquat"></div>
                     <div class="card-content">
                         <h3>Trà Quất Nha Đam</h3>
                         <p>Vị chua thanh của quất hòa với nha đam giòn tan, thanh mát giải nhiệt mùa hè.</p>
@@ -292,7 +307,7 @@
                     </div>
                 </div>
                 <div class="card reveal-card">
-                    <div class="card-img mock-img-placeholder" data-placeholder="Trà Chanh"></div>
+                    <div class="card-img mock-img-trachanh"></div>
                     <div class="card-content">
                         <h3>Trà Chanh</h3>
                         <p>Hương vị trà đen nguyên bản kết hợp chanh tươi mộc mạc và sảng khoái.</p>
@@ -300,7 +315,7 @@
                     </div>
                 </div>
                 <div class="card reveal-card">
-                    <div class="card-img mock-img-placeholder" data-placeholder="Trà Tắc"></div>
+                    <div class="card-img mock-img-tratac"></div>
                     <div class="card-content">
                         <h3>Trà Tắc Xí Muội</h3>
                         <p>Trà ủ sậm màu với tắc thơm lừng thêm viên xí muội mặn mặn chua chua độc đáo.</p>
@@ -432,6 +447,42 @@
     </footer>
 
     <script type="module" src="/main.js"></script>
+
+    <!-- Social Proof Notification -->
+    <div id="social-proof" class="social-proof"></div>
+
+    <!-- Topping Selection Modal -->
+    <div class="cart-modal-overlay" id="topping-overlay"></div>
+    <div class="topping-modal" id="topping-modal">
+        <div class="cart-header">
+            <h3>Thêm Topping (+5k)</h3>
+            <button class="close-cart" id="close-topping"><i class="ph ph-x"></i></button>
+        </div>
+        <div class="topping-list">
+            <label class="topping-item">
+                <input type="checkbox" value="Không lấy topping" id="no-topping-checkbox" checked> Mặc định (Không lấy topping)
+            </label>
+            <label class="topping-item">
+                <input type="checkbox" value="Caramen" class="extra-topping"> Caramen
+            </label>
+            <label class="topping-item">
+                <input type="checkbox" value="Trân châu đen" class="extra-topping"> Trân châu đen
+            </label>
+            <label class="topping-item">
+                <input type="checkbox" value="Trân châu giòn" class="extra-topping"> Trân châu giòn
+            </label>
+            <label class="topping-item">
+                <input type="checkbox" value="Trân châu nhân dừa" class="extra-topping"> Trân châu nhân dừa
+            </label>
+        </div>
+        <div class="cart-footer">
+             <button class="btn btn-primary" id="confirm-topping">Thêm vào giỏ</button>
+        </div>
+    </div>
+
+    <a href="https://m.me/phuong.nguyen.298061" target="_blank" class="messenger-bubble" aria-label="Chat Messenger">
+        <i class="ph-fill ph-messenger-logo"></i>
+    </a>
 </body>
 
 </html>

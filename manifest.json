@@ -1,0 +1,17 @@
+{
+  "name": "Tiệm Chè Phương",
+  "short_name": "Chè Phương",
+  "description": "Thưởng thức chè truyền thống và hiện đại với vị ngọt thanh tao.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff5f5",
+  "theme_color": "#ff4757",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

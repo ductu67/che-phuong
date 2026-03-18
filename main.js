@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = themeToggle.querySelector('i');
 
-    // Check local storage for theme preference
     const currentTheme = localStorage.getItem('theme');
     if (currentTheme) {
         document.body.classList.remove('light-mode', 'dark-mode');
@@ -31,68 +30,64 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 2. Scroll Reveal Animations with Intersection Observer
+    // 2. Scroll Reveal Animations
     const revealElements = document.querySelectorAll('.reveal');
     const revealCards = document.querySelectorAll('.reveal-card');
 
-    const revealOptions = {
-        threshold: 0.15, // Trigger when 15% of the element is visible
-        rootMargin: "0px 0px -50px 0px"
-    };
-
-    const revealObserver = new IntersectionObserver(function (entries, observer) {
+    const revealObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-            if (!entry.isIntersecting) {
-                return;
-            }
-            entry.target.classList.add('active');
-            observer.unobserve(entry.target);
-        });
-    }, revealOptions);
-
-    revealElements.forEach(el => {
-        revealObserver.observe(el);
-    });
-
-    // Staggered animation for cards
-    const cardOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
-    };
-
-    const cardObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
-                // Add staggered delay
-                setTimeout(() => {
-                    entry.target.classList.add('active');
-                }, index * 150); // 150ms delay between cards
-
-                observer.unobserve(entry.target);
+                entry.target.classList.add('active');
+                revealObserver.unobserve(entry.target);
             }
         });
-    }, cardOptions);
+    }, { threshold: 0.15 });
 
-    revealCards.forEach(card => {
-        cardObserver.observe(card);
-    });
+    revealElements.forEach(el => revealObserver.observe(el));
+    revealCards.forEach(card => revealObserver.observe(card));
 
-    // 3. Smooth scrolling for navigation links
+    // 3. Smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
+        anchor.addEventListener('click', function(e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
         });
     });
 
+    // ==========================================
+    // Registered Service Worker for PWA
+    // ==========================================
+    /*
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW register error', err));
+        });
+    }
+    */
 
     // ==========================================
-    // Advanced Features: Shopping Cart Logic
+    // Sound Effects (Web Audio API)
+    // ==========================================
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playClickSound() {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+    }
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('button, a, .card-img')) playClickSound();
+    });
+
+    // ==========================================
+    // Shopping Cart & Topping Logic
     // ==========================================
     let cart = [];
     const cartFloatingBtn = document.getElementById('cart-floating-btn');
@@ -105,7 +100,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartBadges = document.querySelectorAll('.cart-badge, .badgen');
     const toast = document.getElementById('toast');
 
-    // Toggle Cart
+    // Topping Modal Elements
+    const toppingModal = document.getElementById('topping-modal');
+    const toppingOverlay = document.getElementById('topping-overlay');
+    const toppingInputs = document.querySelectorAll('#topping-modal input.extra-topping');
+    const noToppingInput = document.getElementById('no-topping-checkbox');
+    const confirmToppingBtn = document.getElementById('confirm-topping');
+    const closeToppingBtn = document.getElementById('close-topping');
+    let pendingItemName = null;
+
     function toggleCart() {
         cartModal.classList.toggle('active');
         cartOverlay.classList.toggle('active');
@@ -117,7 +120,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeCartBtn) closeCartBtn.addEventListener('click', toggleCart);
     if (cartOverlay) cartOverlay.addEventListener('click', toggleCart);
 
-    // Render Cart
+    // Auto-close cart and clear search when navigating
+    function clearSearch() {
+        document.querySelectorAll('.menu-search').forEach(input => { input.value = ''; });
+        document.body.classList.remove('search-active');
+        document.querySelectorAll('.menu-section, #hero, #combos').forEach(el => { el.style.display = ''; });
+        document.querySelectorAll('.card').forEach(card => { card.style.display = ''; });
+    }
+
+    document.querySelectorAll('.logo a, .nav-links a:not(.nav-cart-btn), .cat-link').forEach(link => {
+        link.addEventListener('click', () => {
+            cartModal.classList.remove('active');
+            cartOverlay.classList.remove('active');
+            clearSearch();
+        });
+    });
+
     function renderCart() {
         if (cart.length === 0) {
             cartItemsContainer.innerHTML = '<p class="empty-cart-msg">Giỏ hàng đang trống. Hãy chọn món thả ga nhé!</p>';
@@ -127,9 +145,12 @@ document.addEventListener('DOMContentLoaded', () => {
             cart.forEach((item, index) => {
                 const div = document.createElement('div');
                 div.className = 'cart-item';
+                const toppingText = item.toppings && item.toppings.length > 0 ? 
+                                   `<small style="display:block; color:var(--accent-color)">+ ${item.toppings.join(', ')}</small>` : '';
                 div.innerHTML = `
                     <div class="cart-item-info">
                         <h4>${item.name}</h4>
+                        ${toppingText}
                     </div>
                     <div class="cart-item-qty">
                         <button class="qty-btn minus" data-index="${index}">-</button>
@@ -141,107 +162,203 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             checkoutBtn.disabled = false;
         }
-
-        // Update badges
         const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
         cartBadges.forEach(badge => badge.textContent = totalItems);
     }
 
-    // Add to cart from menu
-    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const itemName = e.target.closest('.add-to-cart-btn').dataset.name;
-            const existingItem = cart.find(i => i.name === itemName);
-            
-            if (existingItem) {
-                existingItem.qty += 1;
-            } else {
-                cart.push({ name: itemName, qty: 1 });
-            }
-            
-            renderCart();
-            showToast('Đã thêm ' + itemName);
-        });
-    });
-
-    // Handle +/- buttons in cart
-    cartItemsContainer.addEventListener('click', (e) => {
-        if (e.target.classList.contains('qty-btn')) {
-            const index = e.target.dataset.index;
-            if (e.target.classList.contains('plus')) {
-                cart[index].qty += 1;
-            } else if (e.target.classList.contains('minus')) {
-                cart[index].qty -= 1;
-                if (cart[index].qty === 0) {
-                    cart.splice(index, 1);
-                }
-            }
-            renderCart();
-        }
-    });
-
-    // Toast Notification Maker
     function showToast(msg) {
         toast.textContent = msg;
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 2000);
     }
 
-    // Checkout Logic (Copy to clipboard and open FB)
+    // Add to cart from menu (with topping check)
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const name = e.currentTarget.dataset.name;
+            if (name.includes('Chè') || name.includes('Sữa Chua') || name.includes('Sương Sáo') || name.includes('Combo') || name.includes('Trà') || name.includes('Matcha') || name.includes('Đồ Uống')) {
+                pendingItemName = name;
+                toppingModal.classList.add('active');
+                toppingOverlay.classList.add('active');
+                if (noToppingInput) noToppingInput.checked = true;
+                toppingInputs.forEach(i => i.checked = false);
+            } else {
+                addToCart(name);
+            }
+            createFlyingElement(e.currentTarget);
+        });
+    });
+
+    if (noToppingInput) {
+        noToppingInput.addEventListener('change', (e) => {
+            if (e.target.checked) toppingInputs.forEach(i => i.checked = false);
+        });
+    }
+
+    toppingInputs.forEach(input => {
+        input.addEventListener('change', () => {
+             if (noToppingInput) noToppingInput.checked = false;
+        });
+    });
+
+    confirmToppingBtn.addEventListener('click', () => {
+        const selectedToppings = [];
+        toppingInputs.forEach(i => { if (i.checked) selectedToppings.push(i.value); });
+        addToCart(pendingItemName, selectedToppings);
+        toppingModal.classList.remove('active');
+        toppingOverlay.classList.remove('active');
+    });
+
+    closeToppingBtn.addEventListener('click', () => {
+        toppingModal.classList.remove('active');
+        toppingOverlay.classList.remove('active');
+    });
+
+    function addToCart(name, toppings = []) {
+        const existingItem = cart.find(i => i.name === name && JSON.stringify(i.toppings) === JSON.stringify(toppings));
+        if (existingItem) {
+            existingItem.qty += 1;
+        } else {
+            cart.push({ name, qty: 1, toppings });
+        }
+        renderCart();
+        showToast('Đã thêm ' + name);
+    }
+
+    // Handle +/- buttons
+    cartItemsContainer.addEventListener('click', e => {
+        if (e.target.classList.contains('qty-btn')) {
+            const index = e.target.dataset.index;
+            if (e.target.classList.contains('plus')) cart[index].qty += 1;
+            else if (e.target.classList.contains('minus')) {
+                cart[index].qty -= 1;
+                if (cart[index].qty <= 0) cart.splice(index, 1);
+            }
+            renderCart();
+        }
+    });
+
+    // Checkout
     checkoutBtn.addEventListener('click', () => {
         if (cart.length === 0) return;
-        
         let orderText = "Chào tiệm Chè Phương, mình muốn đặt các món sau ít ngọt:\n";
         cart.forEach(item => {
-            orderText += `- ${item.qty} x ${item.name}\n`;
+            orderText += `- ${item.qty} x ${item.name}`;
+            if (item.toppings && item.toppings.length > 0) orderText += ` (Topping: ${item.toppings.join(', ')})`;
+            orderText += "\n";
         });
         orderText += "\nCảm ơn tiệm!";
-
-        // Copy to clipboard
         navigator.clipboard.writeText(orderText).then(() => {
             showToast('Đã chép đơn. Mở Messenger...');
-            setTimeout(() => {
-                window.open('https://m.me/phuong.nguyen.298061', '_blank');
-            }, 1000);
-        }).catch(err => {
-            console.error('Lỗi khi sao chép: ', err);
-            // Fallback if clipboard fails
-            window.open('https://m.me/phuong.nguyen.298061', '_blank');
+            setTimeout(() => { window.open('https://m.me/phuong.nguyen.298061', '_blank'); }, 1000);
         });
     });
 
     // ==========================================
-    // Advanced Features: Sticky Nav Scroll Spy
+    // Real-time Search Filtering
     // ==========================================
-    const catLinks = document.querySelectorAll('.cat-link');
-    const sections = ['modern', 'traditional', 'yogurt', 'drinks', 'gallery'].map(id => document.getElementById(id));
+    const searchInputs = document.querySelectorAll('.menu-search');
+    const allCards = document.querySelectorAll('.card');
     
-    window.addEventListener('scroll', () => {
-        let current = '';
-        sections.forEach(section => {
-            if (!section) return;
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (pageYOffset >= (sectionTop - 150)) {
-                current = section.getAttribute('id');
-            }
-        });
+    const heroSection = document.getElementById('hero');
+    const comboSection = document.getElementById('combos');
 
-        catLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-                
-                // Keep active link in view for horizontal scroll
-                const nav = document.getElementById('sticky-cat-nav');
-                if (nav) {
-                    const scrollLeft = link.offsetLeft - nav.offsetWidth / 2 + link.offsetWidth / 2;
-                    nav.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
-                }
-            }
+    searchInputs.forEach(input => {
+        input.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase().trim();
+            
+            // Sync all search inputs
+            searchInputs.forEach(otherInput => {
+                if (otherInput !== e.target) otherInput.value = e.target.value;
+            });
+
+            // Hide/show hero and combo sections
+            if (heroSection) heroSection.style.display = term ? 'none' : '';
+            if (comboSection) comboSection.style.display = term ? 'none' : '';
+
+            // Toggle compact mode on body
+            document.body.classList.toggle('search-active', !!term);
+
+            // Scroll to top when searching
+            if (term) window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            const sections = document.querySelectorAll('.menu-section');
+            sections.forEach(section => {
+                const cards = section.querySelectorAll('.card');
+                let sectionHasMatch = false;
+                cards.forEach(card => {
+                    const name = card.querySelector('h3').textContent.toLowerCase();
+                    const desc = card.querySelector('p').textContent.toLowerCase();
+                    const matches = !term || name.includes(term) || desc.includes(term);
+                    card.style.display = matches ? '' : 'none';
+                    if (matches) sectionHasMatch = true;
+                });
+                section.style.display = (!term || sectionHasMatch) ? '' : 'none';
+            });
         });
     });
+    // ==========================================
+    // Social Proof Notifications
+    // ==========================================
+    const socialProofEl = document.getElementById('social-proof');
+    const messages = [
+        'Một khách vừa đặt 2 Combo Sống Thảnh Thơi.',
+        '15 người đang xem thực đơn của tiệm.',
+        'Món Chè Sầu Riêng đang rất hot hôm nay!',
+        'Một khách vừa đặt Chè Bưởi ít ngọt.',
+        '8 người đang lựa chọn món cho bữa xế.'
+    ];
+    function cycleSocialProof() {
+        if (!socialProofEl) return;
+        const msg = messages[Math.floor(Math.random() * messages.length)];
+        socialProofEl.innerHTML = '<i class="ph-fill ph-fire"></i> ' + msg;
+        socialProofEl.classList.add('show');
+        setTimeout(() => socialProofEl.classList.remove('show'), 4000);
+        setTimeout(cycleSocialProof, 10000 + Math.random() * 5000);
+    }
+    setTimeout(cycleSocialProof, 5000);
 
+    // ==========================================
+    // Live Status Badge
+    // ==========================================
+    function updateShopStatus() {
+        const badge = document.getElementById('status-badge');
+        if (!badge) return;
+        const hour = new Date().getHours();
+        if (hour >= 8 && hour < 22) {
+            badge.textContent = 'Đang mở cửa';
+            badge.className = 'status-badge status-open';
+        } else {
+            badge.textContent = 'Quán đã nghỉ';
+            badge.className = 'status-badge status-closed';
+        }
+    }
+    updateShopStatus();
+    setInterval(updateShopStatus, 60000);
+
+    // ==========================================
+    // Fly to Cart Animation
+    // ==========================================
+    function createFlyingElement(sourceBtn) {
+        const cartIcon = document.querySelector('.nav-cart-btn .ph-shopping-bag') || document.getElementById('nav-cart-btn');
+        if (!cartIcon) return;
+        const btnRect = sourceBtn.getBoundingClientRect();
+        const cartRect = cartIcon.getBoundingClientRect();
+        const flyer = document.createElement('div');
+        flyer.className = 'flying-item';
+        flyer.innerHTML = '<i class="ph ph-sparkle"></i>';
+        flyer.style.left = `${btnRect.left + btnRect.width / 2 - 20}px`;
+        flyer.style.top = `${btnRect.top + btnRect.height / 2 - 20}px`;
+        document.body.appendChild(flyer);
+
+        requestAnimationFrame(() => {
+            flyer.style.left = `${cartRect.left + cartRect.width / 2 - 20}px`;
+            flyer.style.top = `${cartRect.top + cartRect.height / 2 - 20}px`;
+            flyer.style.transform = 'scale(0.2) rotate(360deg)';
+            flyer.style.opacity = '0';
+        });
+        setTimeout(() => flyer.remove(), 800);
+    }
 
     // ==========================================
     // Image Zoom (Lightbox)
@@ -249,21 +366,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightbox = document.getElementById('image-lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const closeLightboxBtn = document.getElementById('close-lightbox');
-    
-    // Convert background-image url to src
-    function extractImgUrl(element) {
-        const style = window.getComputedStyle(element);
-        const bgInput = style.backgroundImage;
-        if (bgInput && bgInput !== 'none') {
-            return bgInput.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
-        }
-        return null;
-    }
 
     document.querySelectorAll('.card-img').forEach(imgDiv => {
-        imgDiv.addEventListener('click', (e) => {
-            const url = extractImgUrl(imgDiv);
-            if (url) {
+        imgDiv.addEventListener('click', () => {
+            const style = window.getComputedStyle(imgDiv);
+            const url = style.backgroundImage.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+            if (url && url !== 'none') {
                 lightboxImg.src = url;
                 lightbox.classList.add('active');
             }
@@ -272,83 +380,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeLightbox() {
         lightbox.classList.remove('active');
-        setTimeout(() => lightboxImg.src = '', 300); // clear after animation
+        setTimeout(() => lightboxImg.src = '', 300);
     }
-
     if (closeLightboxBtn) closeLightboxBtn.addEventListener('click', closeLightbox);
     if (lightbox) {
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) {
-                closeLightbox();
-            }
-        });
+        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
     }
 
-
     // ==========================================
-    // Live Status Badge
+    // Sticky Nav Scroll Spy
     // ==========================================
-    function updateShopStatus() {
-        const statusBadge = document.getElementById('status-badge');
-        if (!statusBadge) return;
+    const catLinks = document.querySelectorAll('.cat-link');
+    const nav = document.getElementById('sticky-cat-nav');
 
-        const now = new Date();
-        const hour = now.getHours();
-        
-        // Open from 8:00 to 22:00
-        if (hour >= 8 && hour < 22) {
-            statusBadge.textContent = 'Đang mở cửa';
-            statusBadge.className = 'status-badge status-open';
-        } else {
-            statusBadge.textContent = 'Quán đã nghỉ';
-            statusBadge.className = 'status-badge status-closed';
-        }
-    }
-    updateShopStatus();
-    setInterval(updateShopStatus, 60000); // Update every minute
-
-    // ==========================================
-    // Fly to Cart Animation
-    // ==========================================
-    function createFlyingElement(sourceBtn) {
-        const cartIcon = document.querySelector('.nav-cart-btn .ph-shopping-bag') || document.getElementById('nav-cart-btn');
-        if (!cartIcon) return;
-
-        const btnRect = sourceBtn.getBoundingClientRect();
-        const cartRect = cartIcon.getBoundingClientRect();
-
-        const flyer = document.createElement('div');
-        flyer.className = 'flying-item';
-        flyer.innerHTML = '<i class="ph ph-sparkle"></i>';
-        flyer.style.left = `${btnRect.left + btnRect.width / 2 - 20}px`;
-        flyer.style.top = `${btnRect.top + btnRect.height / 2 - 20}px`;
-        document.body.appendChild(flyer);
-
-        // Animate
-        requestAnimationFrame(() => {
-            flyer.style.left = `${cartRect.left + cartRect.width / 2 - 20}px`;
-            flyer.style.top = `${cartRect.top + cartRect.height / 2 - 20}px`;
-            flyer.style.transform = 'scale(0.2) rotate(360deg)';
-            flyer.style.opacity = '0';
+    window.addEventListener('scroll', () => {
+        let current = '';
+        ['modern', 'traditional', 'yogurt', 'drinks'].forEach(id => {
+            const section = document.getElementById(id);
+            if (section && window.pageYOffset >= (section.offsetTop - 200)) current = id;
         });
 
-        setTimeout(() => {
-            flyer.remove();
-            // Subtle pop animation for the cart button
-            const navBtn = document.getElementById('nav-cart-btn');
-            if (navBtn) {
-                navBtn.style.transform = 'scale(1.2)';
-                setTimeout(() => navBtn.style.transform = '', 200);
+        catLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+                if (nav) {
+                    const scrollLeft = link.offsetLeft - nav.offsetWidth / 2 + link.offsetWidth / 2;
+                    nav.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
+                }
             }
-        }, 800);
-    }
-
-    // Wrap the existing add-to-cart listener or add to it
-    const originalAddButtons = document.querySelectorAll('.add-to-cart-btn');
-    originalAddButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            createFlyingElement(e.currentTarget);
         });
     });
-
 });
