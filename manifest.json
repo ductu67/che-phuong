@@ -4,14 +4,26 @@
   "description": "Thưởng thức chè truyền thống và hiện đại với vị ngọt thanh tao.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fff5f5",
-  "theme_color": "#ff4757",
+  "background_color": "#FFF5F7",
+  "theme_color": "#F48FB1",
   "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
     {
       "src": "/logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
