@@ -314,7 +314,16 @@ a {
 .card-content p {
   color: var(--text-color);
   font-size: 0.95rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
+  flex-grow: 1; /* Pushes price and button to the bottom */
+}
+
+.card-price {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
 }
 
 .order-btn {
@@ -422,6 +431,30 @@ a {
 
 .mock-img-tratac {
   background-image: url('/tra-tac-ximuoi.png');
+}
+
+.mock-img-trathai {
+  background-image: url('/tra-thai-xanh.png');
+}
+
+.mock-img-suachuadada {
+  background-image: url('/sua-chua-danh-da.png');
+}
+
+.mock-img-suachua-vietquat {
+  background-image: url('/sua-chua-viet-quat.png');
+}
+
+.mock-img-suachua-chanhleo {
+  background-image: url('/sua-chua-chanh-leo.png');
+}
+
+.mock-img-suachua-dautay {
+  background-image: url('/sua-chua-dau-tay.png');
+}
+
+.mock-img-suachua-oihong {
+  background-image: url('/sua-chua-oi-hong.png');
 }
 
 /* Generic placeholder image style */
@@ -963,6 +996,29 @@ a {
   background: var(--bg-color);
 }
 
+.cart-total-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  font-family: inherit;
+  font-weight: 600;
+}
+
+.total-amount {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--accent-color);
+}
+
+.cart-item-total {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
 .checkout-hint {
   font-size: 0.85rem;
   color: color-mix(in srgb, var(--text-color) 70%, transparent);
@@ -1397,4 +1453,113 @@ a {
 
 .messenger-bubble:hover {
   transform: scale(1.1);
+}
+
+/* =========================================
+   FAQ Section
+   ========================================= */
+.faq-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-item {
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.faq-item.open {
+  box-shadow: 0 8px 30px color-mix(in srgb, var(--accent-color) 15%, transparent);
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-main);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-color);
+  text-align: left;
+  gap: 1rem;
+}
+
+.faq-question i {
+  color: var(--accent-color);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.faq-item.open .faq-question i {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 200px;
+  padding: 0 1.5rem 1.2rem;
+}
+
+.faq-answer p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* =========================================
+   Back to Top Button
+   ========================================= */
+.back-to-top {
+  position: fixed;
+  bottom: 90px;
+  left: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent-color) 40%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 98;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px color-mix(in srgb, var(--accent-color) 50%, transparent);
 }

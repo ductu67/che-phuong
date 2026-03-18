@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // Shopping Cart & Topping Logic
     // ==========================================
-    let cart = [];
+    let cart = JSON.parse(localStorage.getItem('che-phuong-cart') || '[]');
     const cartFloatingBtn = document.getElementById('cart-floating-btn');
     const navCartBtn = document.getElementById('nav-cart-btn');
     const cartModal = document.getElementById('cart-modal');
@@ -143,28 +143,40 @@ document.addEventListener('DOMContentLoaded', () => {
             checkoutBtn.disabled = true;
         } else {
             cartItemsContainer.innerHTML = '';
+            let grandTotal = 0;
             cart.forEach((item, index) => {
                 const div = document.createElement('div');
                 div.className = 'cart-item';
+                const itemPrice = item.price || 0;
+                const toppingPrice = (item.toppings || []).length * 5000;
+                const totalForItem = (itemPrice + toppingPrice) * item.qty;
+                grandTotal += totalForItem;
+
                 const toppingText = item.toppings && item.toppings.length > 0 ? 
                                    `<small style="display:block; color:var(--accent-color)">+ ${item.toppings.join(', ')}</small>` : '';
                 div.innerHTML = `
                     <div class="cart-item-info">
                         <h4>${item.name}</h4>
                         ${toppingText}
+                        <div class="cart-item-qty">
+                            <button class="qty-btn minus" data-index="${index}">-</button>
+                            <span>${item.qty}</span>
+                            <button class="qty-btn plus" data-index="${index}">+</button>
+                        </div>
                     </div>
-                    <div class="cart-item-qty">
-                        <button class="qty-btn minus" data-index="${index}">-</button>
-                        <span>${item.qty}</span>
-                        <button class="qty-btn plus" data-index="${index}">+</button>
+                    <div class="cart-item-total">
+                        ${totalForItem.toLocaleString('vi-VN')}đ
                     </div>
                 `;
                 cartItemsContainer.appendChild(div);
             });
+            const grandTotalEl = document.getElementById('cart-grand-total');
+            if (grandTotalEl) grandTotalEl.textContent = grandTotal.toLocaleString('vi-VN') + 'đ';
             checkoutBtn.disabled = false;
         }
         const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
         cartBadges.forEach(badge => badge.textContent = totalItems);
+        localStorage.setItem('che-phuong-cart', JSON.stringify(cart));
     }
 
     function showToast(msg) {
@@ -176,19 +188,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add to cart from menu (with topping check)
     document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            const name = e.currentTarget.dataset.name;
-            if (name.includes('Chè') || name.includes('Sữa Chua') || name.includes('Sương Sáo') || name.includes('Combo') || name.includes('Trà') || name.includes('Matcha') || name.includes('Đồ Uống')) {
+            const currentBtn = e.currentTarget;
+            const name = currentBtn.dataset.name;
+            const card = currentBtn.closest('.card');
+            let price = 0;
+            if (card) {
+                const priceEl = card.querySelector('.card-price') || card.querySelector('.new-price');
+                if (priceEl) {
+                    price = parseInt(priceEl.textContent.replace(/\D/g, ''));
+                }
+            }
+
+            const isCombo = name.includes('Combo');
+            const needsTopping = name.includes('Chè') || name.includes('Sữa Chua') || name.includes('Sương Sáo') || name.includes('Trà') || name.includes('Matcha') || name.includes('Đồ Uống');
+
+            if (needsTopping && !isCombo) {
                 pendingItemName = name;
+                pendingItemPrice = price; // Store price for topping modal
                 toppingModal.classList.add('active');
                 toppingOverlay.classList.add('active');
                 if (noToppingInput) noToppingInput.checked = true;
                 toppingInputs.forEach(i => i.checked = false);
             } else {
-                addToCart(name);
+                addToCart(name, [], price);
             }
-            createFlyingElement(e.currentTarget);
+            createFlyingElement(currentBtn);
         });
     });
+
+    let pendingItemPrice = 0;
 
     if (noToppingInput) {
         noToppingInput.addEventListener('change', (e) => {
@@ -205,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     confirmToppingBtn.addEventListener('click', () => {
         const selectedToppings = [];
         toppingInputs.forEach(i => { if (i.checked) selectedToppings.push(i.value); });
-        addToCart(pendingItemName, selectedToppings);
+        addToCart(pendingItemName, selectedToppings, pendingItemPrice);
         toppingModal.classList.remove('active');
         toppingOverlay.classList.remove('active');
     });
@@ -215,12 +243,12 @@ document.addEventListener('DOMContentLoaded', () => {
         toppingOverlay.classList.remove('active');
     });
 
-    function addToCart(name, toppings = []) {
+    function addToCart(name, toppings = [], price = 0) {
         const existingItem = cart.find(i => i.name === name && JSON.stringify(i.toppings) === JSON.stringify(toppings));
         if (existingItem) {
             existingItem.qty += 1;
         } else {
-            cart.push({ name, qty: 1, toppings });
+            cart.push({ name, qty: 1, toppings, price });
         }
         renderCart();
         showToast('Đã thêm ' + name);
@@ -242,12 +270,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Checkout
     checkoutBtn.addEventListener('click', () => {
         if (cart.length === 0) return;
-        let orderText = "Chào tiệm Chè Phương, mình muốn đặt các món sau ít ngọt:\n";
+        let orderText = "Chào tiệm Chè Phương, mình muốn đặt các món sau (ít ngọt, giao tận nơi ạ):\n";
+        let grandTotal = 0;
         cart.forEach(item => {
+            const itemPrice = item.price || 0;
+            const toppingPrice = (item.toppings || []).length * 5000;
+            const totalForItem = (itemPrice + toppingPrice) * item.qty;
+            grandTotal += totalForItem;
+
             orderText += `- ${item.qty} x ${item.name}`;
             if (item.toppings && item.toppings.length > 0) orderText += ` (Topping: ${item.toppings.join(', ')})`;
-            orderText += "\n";
+            orderText += `: ${totalForItem.toLocaleString('vi-VN')}đ\n`;
         });
+        orderText += `\nTổng cộng: ${grandTotal.toLocaleString('vi-VN')}đ`;
         orderText += "\nCảm ơn tiệm!";
         navigator.clipboard.writeText(orderText).then(() => {
             showToast('Đã chép đơn. Mở Messenger...');
@@ -423,4 +458,32 @@ document.addEventListener('DOMContentLoaded', () => {
             scrollTicking = true;
         }
     });
+
+    // ==========================================
+    // FAQ Accordion
+    // ==========================================
+    document.querySelectorAll('.faq-question').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const item = btn.closest('.faq-item');
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        });
+    });
+
+    // ==========================================
+    // Back to Top Button
+    // ==========================================
+    const backToTopBtn = document.getElementById('back-to-top');
+    if (backToTopBtn) {
+        window.addEventListener('scroll', () => {
+            backToTopBtn.classList.toggle('visible', window.scrollY > 400);
+        }, { passive: true });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // Render cart on page load (restore from localStorage)
+    renderCart();
 });

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'che-phuong-v2';
+const CACHE_NAME = 'che-phuong-v3';
 const ASSETS = [
   '/',
   '/index.html',
