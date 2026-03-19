@@ -112,6 +112,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Shopping Cart & Topping Logic
     // ==========================================
     let cart = JSON.parse(localStorage.getItem('che-phuong-cart') || '[]');
+
+    // 0. Skeleton Loader Lifecycle
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => card.classList.add('skeleton'));
+    
+    // Smooth transition from preloader to content
+    setTimeout(() => {
+        cards.forEach(card => card.classList.remove('skeleton'));
+    }, 1500);
     const cartFloatingBtn = document.getElementById('cart-floating-btn');
     const navCartBtn = document.getElementById('nav-cart-btn');
     const cartModal = document.getElementById('cart-modal');
@@ -302,8 +311,16 @@ document.addEventListener('DOMContentLoaded', () => {
             cart.push({ name, qty: 1, toppings, price });
         }
         renderCart();
-        const bottomBadge = document.querySelector('.bottom-nav .cart-count-badge');
-        if (bottomBadge) bottomBadge.textContent = cart.reduce((acc, item) => acc + item.qty, 0);
+
+        // Trigger Cart Bounce on all badges
+        const cartTargets = document.querySelectorAll('.nav-cart-btn, #cart-floating-btn');
+        cartTargets.forEach(target => {
+            target.classList.add('cart-bounce');
+            setTimeout(() => {
+                target.classList.remove('cart-bounce');
+            }, 500);
+        });
+
         showToast(`Đã thêm ${name} vào giỏ!`);
     }
 
@@ -556,8 +573,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const scrollLeft = link.offsetLeft - catLinksWrapper.offsetWidth / 2 + link.offsetWidth / 2;
                                 catLinksWrapper.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
                             }
-                            // Also update bottom nav
-                            updateBottomNavActive(current);
                         } else {
                             link.classList.remove('active');
                         }
