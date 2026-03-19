@@ -82,11 +82,11 @@
             <div id="status-badge" class="status-badge"></div>
         </div>
         <ul class="nav-links">
-            <li><a href="#hero">Trang chủ</a></li>
-            <li><a href="#modern">Chè Hiện Đại</a></li>
-            <li><a href="#traditional">Chè Truyền Thống</a></li>
-            <li><a href="#yogurt">Sữa Chua</a></li>
-            <li><a href="#drinks">Đồ Uống</a></li>
+                <li><a href="#modern"><i class="ph ph-list-bullets"></i> Thực Đơn</a></li>
+                <li><a href="#combos"><i class="ph ph-fire"></i> Combo Hot</a></li>
+                <li><a href="#faq"><i class="ph ph-question"></i> FAQ</a></li>
+                <li><a href="#feedback"><i class="ph ph-paper-plane"></i> Góp Ý</a></li>
+                <li><a href="#footer"><i class="ph ph-phone"></i> Liên Hệ</a></li>
             <li><button class="nav-cart-btn" id="nav-cart-btn" aria-label="Xem giỏ hàng">
                     <i class="ph ph-shopping-bag"></i> <span class="cart-text">Giỏ hàng</span> <span
                         class="badgen">0</span></button></li>
@@ -109,10 +109,12 @@
             </div>
         </div>
         <div class="cat-links-wrapper">
-            <a href="#modern" class="cat-link active">Hiện Đại</a>
-            <a href="#traditional" class="cat-link">Truyền Thống</a>
+            <a href="#combos" class="cat-link active">Combo</a>
+            <a href="#modern" class="cat-link">Chè</a>
             <a href="#yogurt" class="cat-link">Sữa Chua</a>
             <a href="#drinks" class="cat-link">Đồ Uống</a>
+            <a href="#faq" class="cat-link">FAQ</a>
+            <a href="#feedback" class="cat-link">Góp ý</a>
         </div>
     </div>
     <main>
@@ -604,55 +606,6 @@
         </section>
 
         <!-- FAQ Section -->
-        <section id="faq" class="section reveal faq-section">
-            <div class="section-header">
-                <h2>Câu Hỏi Thường Gặp</h2>
-                <p>Mọi thắc mắc về Tiệm Chè Phương đều có nhé!</p>
-            </div>
-            <div class="faq-list">
-                <div class="faq-item reveal-card">
-                    <button class="faq-question" aria-expanded="false"><span>Quán có giao hàng không?</span><i
-                            class="ph ph-caret-down"></i></button>
-                    <div class="faq-answer">
-                        <p>Tiệm Chè Phương <strong>có hỗ trợ giao hàng rẹt rẹt</strong> trong khu vực! Bạn cứ đặt đơn
-                            qua Messenger, quán sẽ chốt đơn và ship tận nơi nhé.</p>
-                    </div>
-                </div>
-                <div class="faq-item reveal-card">
-                    <button class="faq-question" aria-expanded="false"><span>Giờ mở cửa là mấy giờ?</span><i
-                            class="ph ph-caret-down"></i></button>
-                    <div class="faq-answer">
-                        <p>Quán mở cửa từ <strong>8:00 sáng đến 22:00 tối</strong> mọi ngày trong tuần kể cả Chủ nhật.
-                        </p>
-                    </div>
-                </div>
-                <div class="faq-item reveal-card">
-                    <button class="faq-question" aria-expanded="false"><span>Có thể yêu cầu ít ngọt hơn không?</span><i
-                            class="ph ph-caret-down"></i></button>
-                    <div class="faq-answer">
-                        <p>Tất nhiên! Phương châm của tiệm là <strong>"ít ngọt, thanh mát"</strong>. Bạn có thể yêu cầu
-                            ít ngọt hơn hoặc bao nhiêu ngọt tùy thích.</p>
-                    </div>
-                </div>
-                <div class="faq-item reveal-card">
-                    <button class="faq-question" aria-expanded="false"><span>Topping có mất thêm tiền không?</span><i
-                            class="ph ph-caret-down"></i></button>
-                    <div class="faq-answer">
-                        <p>Topping Caramĕn thêm <strong>5.000đ</strong>, Trân Châu Dừa thêm <strong>5.000đ</strong>. Các
-                            topping khác được tính trong giá sản phẩm.</p>
-                    </div>
-                </div>
-                <div class="faq-item reveal-card">
-                    <button class="faq-question" aria-expanded="false"><span>Quán ở đâu?</span><i
-                            class="ph ph-caret-down"></i></button>
-                    <div class="faq-answer">
-                        <p>Tiệm Chè Phương tại <strong>Cầu Sôn, Đại Bái, Gia Bình, Bắc Ninh</strong>. Bạn có thể tìm
-                            trên Google Maps nhé!</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section id="gallery" class="section reveal gallery-section" style="display: none;">
             <div class="section-header">
                 <h2>Góc Sống Ảo</h2>
@@ -719,6 +672,69 @@
         </div>
     </div>
 
+    <section id="faq" class="faq-section reveal">
+        <div class="container">
+            <h2 class="section-title">Câu Hỏi Thường Gặp</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Chè Phương có giao hàng tận nơi không?</span>
+                        <i class="ph ph-plus"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Chúng tôi giao hàng trong bán kính 10km. Miễn phí giao hàng cho đơn hàng trên 200.000 VNĐ.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Giờ mở cửa của quán là khi nào?</span>
+                        <i class="ph ph-plus"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Quán mở cửa từ 8:00 sáng đến 10:00 tối tất cả các ngày trong tuần.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Các món chè có quá ngọt không?</span>
+                        <i class="ph ph-plus"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Chè Phương sử dụng đường phèn tự nhiên, vị ngọt thanh mát, không gắt. Bạn có thể yêu cầu giảm đường khi đặt hàng.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="feedback" class="feedback-section reveal">
+        <div class="container">
+            <h2 class="section-title">Gửi Góp Ý Cho Chúng Tôi</h2>
+            <div class="feedback-container">
+                <form id="feedback-form" class="feedback-form">
+                    <div class="form-group">
+                        <input type="text" id="fb-name" placeholder="Họ và tên" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="fb-email" placeholder="Email (không bắt buộc)">
+                    </div>
+                    <div class="form-group">
+                        <textarea id="fb-message" placeholder="Góp ý của bạn..." rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn primary-btn">
+                        <span>GỬI GÓP Ý</span> <i class="ph ph-paper-plane-tilt"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile Sticky Order Button -->
+    <a href="#combos" class="mobile-order-btn hide-on-desktop">
+        <i class="ph-fill ph-shopping-bag"></i>
+        <span>ĐẶT HÀNG NGAY</span>
+    </a>
+
     <!-- Footer -->
     <footer id="footer" class="footer reveal">
         <div class="footer-content">
@@ -747,6 +763,19 @@
         <div class="copyright">
             <p>&copy; 2026 Chè Phương. Thiết kế bởi Antigravity.</p>
         </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Họ và tên của bạn" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Email (không bắt buộc)">
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Nội dung góp ý của bạn..." rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Gửi Góp Ý <i class="ph ph-paper-plane-tilt"></i></button>
+                </form>
+            </div>
+        </section>
     </footer>
 
 
