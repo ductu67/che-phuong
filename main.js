@@ -314,11 +314,19 @@ document.addEventListener('DOMContentLoaded', () => {
             modalProductPrice.textContent = price;
             
             const modalImgContainer = document.querySelector('.product-detail-image');
+            const modalGrid = document.querySelector('.product-detail-grid');
+            const modalContent = document.querySelector('.product-detail-content');
+            
             if (imgSrc && imgSrc !== 'none') {
                 modalProductImg.src = imgSrc;
                 modalImgContainer.style.display = 'block';
+                if (modalGrid) modalGrid.classList.remove('no-image');
+                if (modalContent) modalContent.classList.remove('no-image-content');
             } else {
+                modalProductImg.src = '';
                 modalImgContainer.style.display = 'none';
+                if (modalGrid) modalGrid.classList.add('no-image');
+                if (modalContent) modalContent.classList.add('no-image-content');
             }
             
             // For badge, we can determine based on category
