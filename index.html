@@ -769,35 +769,52 @@
     <!-- Social Proof Notification -->
     <div id="social-proof" class="social-proof"></div>
 
-    <!-- Topping Selection Modal -->
-    <div class="cart-modal-overlay" id="topping-overlay"></div>
-    <div class="topping-modal" id="topping-modal">
-        <div class="cart-header">
-            <h3>Thêm Topping (+5k)</h3>
-            <button class="close-cart" id="close-topping"><i class="ph ph-x"></i></button>
-        </div>
-        <div class="topping-list">
-            <label class="topping-item">
-                <input type="checkbox" value="Không lấy topping" id="no-topping-checkbox" checked> Mặc định (Không lấy
-                topping)
-            </label>
-            <label class="topping-item">
-                <input type="checkbox" value="Caramen" class="extra-topping"> Caramen
-            </label>
-            <label class="topping-item">
-                <input type="checkbox" value="Trân châu đen" class="extra-topping"> Trân châu đen
-            </label>
-            <label class="topping-item">
-                <input type="checkbox" value="Trân châu giòn" class="extra-topping"> Trân châu giòn
-            </label>
-            <label class="topping-item">
-                <input type="checkbox" value="Trân châu nhân dừa" class="extra-topping"> Trân châu nhân dừa
-            </label>
-        </div>
-        <div class="cart-footer">
-            <button class="btn btn-primary" id="confirm-topping">Thêm vào giỏ</button>
+    <!-- Product Detail Modal V2 (Premium) -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content product-detail-content">
+            <button class="detail-close" id="close-product-btn" aria-label="Đóng cửa sổ"><i class="ph ph-x"></i></button>
+            <div class="product-detail-grid">
+                <div class="product-detail-image">
+                    <div class="detail-badge" id="modal-product-badge">Nổi bật</div>
+                    <img id="modal-product-img" src="" alt="">
+                </div>
+                <div class="product-detail-info">
+                    <div class="detail-header">
+                        <h2 id="modal-product-name">Tên món ăn</h2>
+                        <span class="detail-price" id="modal-product-price">0đ</span>
+                    </div>
+                    <p id="modal-product-desc" class="detail-desc">Hương vị chè truyền thống, đậm đà và ngọt thanh từ nguyên liệu tự nhiên.</p>
+                    
+                    <div class="detail-features">
+                        <div class="feature-item"><i class="ph-fill ph-leaf"></i> <span>Tự nhiên</span></div>
+                        <div class="feature-item"><i class="ph-fill ph-thermometer-cold"></i> <span>Ít đường</span></div>
+                        <div class="feature-item"><i class="ph-fill ph-clock"></i> <span>Nấu mới</span></div>
+                    </div>
+
+                    <!-- New Topping Selection Section -->
+                    <div id="modal-toppings-section" class="detail-toppings-section">
+                        <h4>Thêm Topping (Tùy chọn)</h4>
+                        <div id="modal-toppings-container" class="topping-chips-container">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+
+                    <div class="detail-actions">
+                        <div class="qty-selector">
+                            <button class="qty-btn" id="modal-qty-minus">-</button>
+                            <span id="modal-qty-value">1</span>
+                            <button class="qty-btn" id="modal-qty-plus">+</button>
+                        </div>
+                        <button class="btn btn-primary" id="modal-add-to-cart-btn">
+                            <i class="ph ph-shopping-cart"></i> THÊM VÀO GIỎ
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <div id="product-overlay" class="modal-overlay"></div>
+
 
     <a href="tel:0973982604" class="phone-bubble" aria-label="Gọi điện ngay">
         <i class="ph-fill ph-phone"></i>

@@ -131,13 +131,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartBadges = document.querySelectorAll('.cart-badge, .badgen');
     const toast = document.getElementById('toast');
 
-    // Topping Modal Elements
-    const toppingModal = document.getElementById('topping-modal');
-    const toppingOverlay = document.getElementById('topping-overlay');
-    const toppingInputs = document.querySelectorAll('#topping-modal input.extra-topping');
-    const noToppingInput = document.getElementById('no-topping-checkbox');
-    const confirmToppingBtn = document.getElementById('confirm-topping');
-    const closeToppingBtn = document.getElementById('close-topping');
+    // Product Detail Modal Elements
+    const productModal = document.getElementById('product-modal');
+    const productOverlay = document.getElementById('product-overlay');
+    const closeProductBtn = document.getElementById('close-product-btn');
+    const modalProductImg = document.getElementById('modal-product-img');
+    const modalProductName = document.getElementById('modal-product-name');
+    const modalProductDesc = document.getElementById('modal-product-desc');
+    const modalProductPrice = document.getElementById('modal-product-price');
+    const modalProductBadge = document.getElementById('modal-product-badge');
+    const modalQtyValue = document.getElementById('modal-qty-value');
+    const modalQtyMinus = document.getElementById('modal-qty-minus');
+    const modalQtyPlus = document.getElementById('modal-qty-plus');
+    const modalAddToCartBtn = document.getElementById('modal-add-to-cart-btn');
+    const modalToppingsSection = document.getElementById('modal-toppings-section');
+    const modalToppingsContainer = document.getElementById('modal-toppings-container');
+    
+    let modalQty = 1;
+
+    const availableToppings = [
+        { name: 'Caramen', icon: 'ph-star' },
+        { name: 'Trân châu đen', icon: 'ph-circle' },
+        { name: 'Trân châu giòn', icon: 'ph-circle-dashed' },
+        { name: 'Trân châu nhân dừa', icon: 'ph-nut' }
+    ];
     let pendingItemName = null;
 
     function debounce(func, wait) {
@@ -153,9 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function toggleCart() {
-        cartModal.classList.toggle('active');
+        const isActive = cartModal.classList.toggle('active');
         cartOverlay.classList.toggle('active');
-        renderCart();
+        document.body.classList.toggle('cart-open', isActive);
+        if (isActive) renderCart();
     }
 
     if (cartFloatingBtn) cartFloatingBtn.addEventListener('click', toggleCart);
@@ -175,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', () => {
             cartModal.classList.remove('active');
             cartOverlay.classList.remove('active');
+            document.body.classList.remove('cart-open');
             clearSearch();
         });
     });
@@ -185,14 +204,12 @@ document.addEventListener('DOMContentLoaded', () => {
             checkoutBtn.disabled = true;
         } else {
             cartItemsContainer.innerHTML = '';
-            let grandTotal = 0;
             cart.forEach((item, index) => {
                 const div = document.createElement('div');
                 div.className = 'cart-item';
                 const itemPrice = item.price || 0;
                 const toppingPrice = (item.toppings || []).length * 5000;
                 const totalForItem = (itemPrice + toppingPrice) * item.qty;
-                grandTotal += totalForItem;
 
                 const toppingText = item.toppings && item.toppings.length > 0 ? 
                                    `<small style="display:block; color:var(--accent-color)">+ ${item.toppings.join(', ')}</small>` : '';
@@ -212,8 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 cartItemsContainer.appendChild(div);
             });
-            const grandTotalEl = document.getElementById('cart-grand-total');
-            if (grandTotalEl) grandTotalEl.textContent = grandTotal.toLocaleString('vi-VN') + 'đ';
             checkoutBtn.disabled = false;
 
             // Add clear cart button if items exist
@@ -234,6 +249,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 cartItemsContainer.appendChild(clearContainer);
             }
         }
+        
+        // Always update grand total display
+        const grandTotalEl = document.getElementById('cart-grand-total');
+        if (grandTotalEl) {
+            const grandTotal = cart.reduce((sum, item) => {
+                const itemPrice = item.price || 0;
+                const toppingPrice = (item.toppings || []).length * 5000;
+                return sum + (itemPrice + toppingPrice) * item.qty;
+            }, 0);
+            grandTotalEl.textContent = grandTotal.toLocaleString('vi-VN') + 'đ';
+        }
+
         const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
         cartBadges.forEach(badge => badge.textContent = totalItems);
         localStorage.setItem('che-phuong-cart', JSON.stringify(cart));
@@ -259,49 +286,120 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            const isCombo = name.includes('Combo');
-            const needsTopping = name.includes('Chè') || name.includes('Sữa Chua') || name.includes('Sương Sáo') || name.includes('Trà') || name.includes('Matcha') || name.includes('Đồ Uống');
-
-            if (needsTopping && !isCombo) {
-                pendingItemName = name;
-                pendingItemPrice = price; // Store price for topping modal
-                toppingModal.classList.add('active');
-                toppingOverlay.classList.add('active');
-                if (noToppingInput) noToppingInput.checked = true;
-                toppingInputs.forEach(i => i.checked = false);
-            } else {
-                addToCart(name, [], price);
-            }
-            createFlyingElement(currentBtn);
+            // NEW: Always open the premium detail modal instead of adding directly
+            // This ensures a "Premium" experience where users see details/toppings first.
+            card.click();
         });
     });
 
-    let pendingItemPrice = 0;
+    // Product Detail Modal Logic
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('.add-to-cart-btn')) return;
+            
+            const name = card.querySelector('h3').textContent;
+            const desc = card.querySelector('p').textContent;
+            const priceEl = card.querySelector('.card-price') || card.querySelector('.new-price');
+            const price = priceEl ? priceEl.textContent : '0đ';
+            
+            const imgDiv = card.querySelector('.card-img');
+            let imgSrc = "";
+            if (imgDiv) {
+                const style = window.getComputedStyle(imgDiv);
+                imgSrc = style.backgroundImage.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+            }
 
-    if (noToppingInput) {
-        noToppingInput.addEventListener('change', (e) => {
-            if (e.target.checked) toppingInputs.forEach(i => i.checked = false);
+            modalProductName.textContent = name;
+            modalProductDesc.textContent = desc;
+            modalProductPrice.textContent = price;
+            
+            const modalImgContainer = document.querySelector('.product-detail-image');
+            if (imgSrc && imgSrc !== 'none') {
+                modalProductImg.src = imgSrc;
+                modalImgContainer.style.display = 'block';
+            } else {
+                modalImgContainer.style.display = 'none';
+            }
+            
+            // For badge, we can determine based on category
+            const parentSection = card.closest('.menu-section');
+            const catName = parentSection ? parentSection.querySelector('h2').textContent : "Phổ biến";
+            
+            modalProductName.textContent = name;
+            modalProductDesc.textContent = desc;
+            modalProductPrice.textContent = price;
+            modalProductImg.src = imgSrc;
+            modalProductBadge.textContent = catName;
+            
+            modalQty = 1;
+            modalQtyValue.textContent = modalQty;
+            
+            productModal.classList.add('active');
+            productOverlay.classList.add('active');
+
+            // Toppings Logic
+            const needsTopping = name.includes('Chè') || name.includes('Sữa Chua') || name.includes('Sương Sáo') || name.includes('Trà') || name.includes('Matcha') || name.includes('Đồ Uống');
+            const isCombo = name.includes('Combo');
+
+            if (needsTopping && !isCombo) {
+                modalToppingsSection.style.display = 'block';
+                modalToppingsContainer.innerHTML = '';
+                availableToppings.forEach(top => {
+                    const chip = document.createElement('div');
+                    chip.className = 'topping-chip';
+                    chip.innerHTML = `<i class="ph ${top.icon}"></i> ${top.name}`;
+                    chip.addEventListener('click', () => chip.classList.toggle('selected'));
+                    modalToppingsContainer.appendChild(chip);
+                });
+            } else {
+                modalToppingsSection.style.display = 'none';
+            }
+        });
+    });
+
+    const closeProductModal = () => {
+        productModal.classList.remove('active');
+        productOverlay.classList.remove('active');
+    };
+
+    if (closeProductBtn) closeProductBtn.addEventListener('click', closeProductModal);
+    if (productOverlay) productOverlay.addEventListener('click', closeProductModal);
+
+    if (modalQtyPlus) {
+        modalQtyPlus.addEventListener('click', () => {
+            modalQty++;
+            modalQtyValue.textContent = modalQty;
         });
     }
 
-    toppingInputs.forEach(input => {
-        input.addEventListener('change', () => {
-             if (noToppingInput) noToppingInput.checked = false;
+    if (modalQtyMinus) {
+        modalQtyMinus.addEventListener('click', () => {
+            if (modalQty > 1) {
+                modalQty--;
+                modalQtyValue.textContent = modalQty;
+            }
         });
-    });
+    }
 
-    confirmToppingBtn.addEventListener('click', () => {
-        const selectedToppings = [];
-        toppingInputs.forEach(i => { if (i.checked) selectedToppings.push(i.value); });
-        addToCart(pendingItemName, selectedToppings, pendingItemPrice);
-        toppingModal.classList.remove('active');
-        toppingOverlay.classList.remove('active');
-    });
+    if (modalAddToCartBtn) {
+        modalAddToCartBtn.addEventListener('click', () => {
+            const name = modalProductName.textContent;
+            let price = parseInt(modalProductPrice.textContent.replace(/\D/g, ''));
+            
+            // Collect selected toppings from chips
+            const selectedToppings = [];
+            modalToppingsContainer.querySelectorAll('.topping-chip.selected').forEach(chip => {
+                selectedToppings.push(chip.textContent.trim());
+            });
 
-    closeToppingBtn.addEventListener('click', () => {
-        toppingModal.classList.remove('active');
-        toppingOverlay.classList.remove('active');
-    });
+            // Add multiple based on modalQty
+            for(let i=0; i<modalQty; i++) {
+                addToCart(name, selectedToppings, price);
+            }
+            
+            closeProductModal();
+        });
+    }
 
     function addToCart(name, toppings = [], price = 0) {
         const existingItem = cart.find(i => i.name === name && JSON.stringify(i.toppings) === JSON.stringify(toppings));
@@ -507,16 +605,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightboxImg = document.getElementById('lightbox-img');
     const closeLightboxBtn = document.getElementById('close-lightbox');
 
-    document.querySelectorAll('.card-img').forEach(imgDiv => {
-        imgDiv.addEventListener('click', () => {
-            const style = window.getComputedStyle(imgDiv);
-            const url = style.backgroundImage.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
-            if (url && url !== 'none') {
-                lightboxImg.src = url;
-                lightbox.classList.add('active');
-            }
-        });
-    });
 
     function closeLightbox() {
         lightbox.classList.remove('active');
@@ -634,6 +722,37 @@ document.addEventListener('DOMContentLoaded', () => {
             container.appendChild(bubble);
         }
     }
+    function createFlyingElement(btn) {
+        if (!btn) return;
+        const img = btn.closest('.card')?.querySelector('.card-img');
+        if (!img) return;
+
+        const rect = img.getBoundingClientRect();
+        const flyer = document.createElement('div');
+        flyer.className = 'cart-flyer';
+        
+        const style = window.getComputedStyle(img);
+        flyer.style.backgroundImage = style.backgroundImage;
+        flyer.style.left = rect.left + 'px';
+        flyer.style.top = rect.top + 'px';
+        flyer.style.width = rect.width + 'px';
+        flyer.style.height = rect.height + 'px';
+        
+        document.body.appendChild(flyer);
+
+        const cartTarget = document.querySelector('#nav-cart-btn') || document.querySelector('#cart-floating-btn');
+        const targetRect = cartTarget.getBoundingClientRect();
+
+        flyer.animate([
+            { left: rect.left + 'px', top: rect.top + 'px', width: rect.width + 'px', height: rect.height + 'px', opacity: 1, borderRadius: '20px' },
+            { left: targetRect.left + 'px', top: targetRect.top + 'px', width: '20px', height: '20px', opacity: 0, borderRadius: '50%' }
+        ], {
+            duration: 800,
+            easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+            fill: 'forwards'
+        }).onfinish = () => flyer.remove();
+    }
+
     createBubbles();
 
     // Render cart on page load (restore from localStorage)
