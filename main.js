@@ -1,4 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 0. Preloader Logic
+    const preloader = document.getElementById('preloader');
+    window.addEventListener('load', () => {
+        if (preloader) {
+            preloader.classList.add('fade-out');
+            setTimeout(() => preloader.remove(), 600);
+        }
+    });
+
+    // 0.1 Reading Progress Bar Logic
+    const progressBar = document.getElementById('reading-progress');
+    window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        if (progressBar) progressBar.style.width = scrolled + "%";
+    }, { passive: true });
+
     // 1. Theme Toggle Logic
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = themeToggle.querySelector('i');
@@ -494,11 +512,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sticky Nav Scroll Spy (debounced with rAF)
     // ==========================================
     const catLinks = document.querySelectorAll('.cat-link');
-    const nav = document.getElementById('sticky-cat-nav');
+    const navContainer = document.getElementById('sticky-cat-nav');
+    const catLinksWrapper = document.querySelector('.cat-links-wrapper');
     const sectionIds = ['modern', 'traditional', 'yogurt', 'drinks'];
     const spySections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
     let scrollTicking = false;
     let lastActiveId = '';
+
+    function updateArrowVisibility() {
+        if (!catLinksWrapper || !navContainer) return;
+        const scrollLeft = catLinksWrapper.scrollLeft;
+        const maxScroll = catLinksWrapper.scrollWidth - catLinksWrapper.clientWidth;
+        
+        navContainer.classList.toggle('has-left-scroll', scrollLeft > 10);
+        navContainer.classList.toggle('has-right-scroll', scrollLeft < maxScroll - 10);
+    }
+
+    if (catLinksWrapper) {
+        catLinksWrapper.addEventListener('scroll', updateArrowVisibility, { passive: true });
+        window.addEventListener('resize', updateArrowVisibility, { passive: true });
+        updateArrowVisibility();
+    }
 
     window.addEventListener('scroll', () => {
         if (!scrollTicking) {
@@ -516,14 +550,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         const href = link.getAttribute('href').substring(1);
                         if (href === current) {
                             link.classList.add('active');
-                            if (nav) {
-                                const scrollLeft = link.offsetLeft - nav.offsetWidth / 2 + link.offsetWidth / 2;
-                                nav.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
+                            if (catLinksWrapper) {
+                                const scrollLeft = link.offsetLeft - catLinksWrapper.offsetWidth / 2 + link.offsetWidth / 2;
+                                catLinksWrapper.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
                             }
                         } else {
                             link.classList.remove('active');
                         }
                     });
+                    updateArrowVisibility();
                 }
                 scrollTicking = false;
             });
@@ -555,6 +590,32 @@ document.addEventListener('DOMContentLoaded', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
+
+    // ==========================================
+    // Floating Bubbles Decoration
+    // ==========================================
+    function createBubbles() {
+        const container = document.createElement('div');
+        container.className = 'bubble-container';
+        document.body.appendChild(container);
+
+        const bubbleCount = 15;
+        for (let i = 0; i < bubbleCount; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            
+            const size = Math.random() * 60 + 20 + 'px';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            
+            bubble.style.left = Math.random() * 100 + '%';
+            bubble.style.animationDuration = Math.random() * 10 + 10 + 's';
+            bubble.style.animationDelay = Math.random() * 10 + 's';
+            
+            container.appendChild(bubble);
+        }
+    }
+    createBubbles();
 
     // Render cart on page load (restore from localStorage)
     renderCart();
