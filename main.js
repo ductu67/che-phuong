@@ -302,7 +302,9 @@ document.addEventListener('DOMContentLoaded', () => {
             cart.push({ name, qty: 1, toppings, price });
         }
         renderCart();
-        showToast('Đã thêm ' + name);
+        const bottomBadge = document.querySelector('.bottom-nav .cart-count-badge');
+        if (bottomBadge) bottomBadge.textContent = cart.reduce((acc, item) => acc + item.qty, 0);
+        showToast(`Đã thêm ${name} vào giỏ!`);
     }
 
     // Handle +/- buttons
@@ -554,6 +556,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const scrollLeft = link.offsetLeft - catLinksWrapper.offsetWidth / 2 + link.offsetWidth / 2;
                                 catLinksWrapper.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
                             }
+                            // Also update bottom nav
+                            updateBottomNavActive(current);
                         } else {
                             link.classList.remove('active');
                         }
