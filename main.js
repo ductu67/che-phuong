@@ -757,47 +757,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Render cart on page load (restore from localStorage)
     renderCart();
-    // FAQ Accordion
-    document.querySelectorAll('.faq-question').forEach(q => {
-        q.addEventListener('click', () => {
-            const item = q.parentElement;
-            const wasActive = item.classList.contains('active');
-            
-            // Close all other items
-            document.querySelectorAll('.faq-item').forEach(otherItem => {
-                otherItem.classList.remove('active');
-            });
-
-            // Toggle current item
-            if (!wasActive) {
-                item.classList.add('active');
-            }
-        });
-    });
-
-    // Feedback Form
-    const feedbackForm = document.getElementById('feedback-form');
-    if (feedbackForm) {
-        feedbackForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const submitBtn = feedbackForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="ph ph-spinner-gap mdi-spin"></i> Đang gửi...';
-
-            // Simulate submission
-            setTimeout(() => {
-                showToast('Cảm ơn bạn đã góp ý! <i class="ph-fill ph-check-circle"></i>');
-                feedbackForm.reset();
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-            }, 1000);
-        });
-    }
-
-    // Initialize reveal animations for new sections
-    if (typeof revealObserver !== 'undefined') {
-        document.querySelectorAll('.faq-section, .feedback-section').forEach(el => revealObserver.observe(el));
-    }
 });
