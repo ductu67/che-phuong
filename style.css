@@ -2545,6 +2545,12 @@ body.cart-open .cart-floating-btn {
 
 @media (max-width: 768px) {
   .install-banner {
-    bottom: 80px;
+    top: 15px;
+    bottom: auto;
+    transform: translateX(-50%) translateY(-150%);
+  }
+  
+  .install-banner.show {
+    transform: translateX(-50%) translateY(0);
   }
 }
