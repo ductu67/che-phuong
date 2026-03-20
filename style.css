@@ -366,7 +366,8 @@ a {
 }
 
 .card-img {
-  height: 250px;
+  aspect-ratio: 16 / 10;
+  width: 100%;
   background-size: cover;
   background-position: center;
   transition: transform 0.8s ease;
@@ -495,114 +496,33 @@ a {
 }
 
 /* Mock images replaced with actual images */
-.mock-img-1 {
-  background-image: url('/saurieng.png');
-}
-
-.mock-img-2 {
-  background-image: url('/xoai.png');
-}
-
-.mock-img-3 {
-  background-image: url('/ngocthach.png');
-}
-
-.mock-img-4 {
-  background-image: url('/thapcam.png');
-}
-
-.mock-img-5 {
-  background-image: url('/buoi.png');
-}
-
-/* Add new image classes for those successfully generated */
-.mock-img-khoaideo {
-  background-image: url('/khoaideo.png');
-}
-
-.mock-img-khucbach {
-  background-image: url('/khucbach.png');
-}
-
-.mock-img-duanon {
-  background-image: url('/duanon.png');
-}
-
-.mock-img-bo {
-  background-image: url('/bo.png');
-}
-
-.mock-img-suongsao {
-  background-image: url('/suongsao.png');
-}
-
-.mock-img-doden {
-  background-image: url('/doden.png');
-}
-
-.mock-img-ngo {
-  background-image: url('/ngo.png');
-}
-
-.mock-img-com {
-  background-image: url('/com.png');
-}
-
-.mock-img-suachuamit {
-  background-image: url('/suachuamit.png');
-}
-
-.mock-img-suachuanepcam {
-  background-image: url('/suachuanepcam.png');
-}
-
-.mock-img-suachuahoaqua {
-  background-image: url('/suachuahoaqua.png');
-}
-
-.mock-img-suachuatranchau {
-  background-image: url('/suachuatranchau.png');
-}
-
-.mock-img-matcha {
-  background-image: url('/matcha-latte.png');
-}
-
-.mock-img-traquat {
-  background-image: url('/tra-quat-nhadam.png');
-}
-
-.mock-img-trachanh {
-  background-image: url('/tra-chanh.png');
-}
-
-.mock-img-tratac {
-  background-image: url('/tra-tac-ximuoi.png');
-}
-
-.mock-img-trathai {
-  background-image: url('/tra-thai-xanh.png');
-}
-
-.mock-img-suachuadada {
-  background-image: url('/sua-chua-danh-da.png');
-}
-
-.mock-img-suachua-vietquat {
-  background-image: url('/sua-chua-viet-quat.png');
-}
-
-.mock-img-suachua-chanhleo {
-  background-image: url('/sua-chua-chanh-leo.png');
-}
-
-.mock-img-suachua-dautay {
-  background-image: url('/sua-chua-dau-tay.png');
-}
-
-.mock-img-suachua-oihong {
-  background-image: url('/sua-chua-oi-hong.png');
-}
+.mock-img-1 { background-image: url('/saurieng.webp'); }
+.mock-img-2 { background-image: url('/xoai.webp'); }
+.mock-img-3 { background-image: url('/ngocthach.webp'); }
+.mock-img-4 { background-image: url('/thapcam.webp'); }
+.mock-img-5 { background-image: url('/buoi.webp'); }
+.mock-img-khoaideo { background-image: url('/khoaideo.webp'); }
+.mock-img-khucbach { background-image: url('/khucbach.webp'); }
+.mock-img-duanon { background-image: url('/duanon.webp'); }
+.mock-img-bo { background-image: url('/bo.webp'); }
+.mock-img-suongsao { background-image: url('/suongsao.webp'); }
+.mock-img-doden { background-image: url('/doden.webp'); }
+.mock-img-ngo { background-image: url('/ngo.webp'); }
+.mock-img-com { background-image: url('/com.webp'); }
+.mock-img-suachuamit { background-image: url('/suachuamit.webp'); }
+.mock-img-suachuanepcam { background-image: url('/suachuanepcam.webp'); }
+.mock-img-suachuahoaqua { background-image: url('/suachuahoaqua.webp'); }
+.mock-img-suachuatranchau { background-image: url('/suachuatranchau.webp'); }
+.mock-img-matcha { background-image: url('/matcha-latte.webp'); }
+.mock-img-traquat { background-image: url('/tra-quat-nhadam.webp'); }
+.mock-img-trachanh { background-image: url('/tra-chanh.webp'); }
+.mock-img-tratac { background-image: url('/tra-tac-ximuoi.webp'); }
+.mock-img-trathai { background-image: url('/tra-thai-xanh.webp'); }
+.mock-img-suachuadada { background-image: url('/sua-chua-danh-da.webp'); }
+.mock-img-suachua-vietquat { background-image: url('/sua-chua-viet-quat.webp'); }
+.mock-img-suachua-chanhleo { background-image: url('/sua-chua-chanh-leo.webp'); }
+.mock-img-suachua-dautay { background-image: url('/sua-chua-dau-tay.webp'); }
+.mock-img-suachua-oihong { background-image: url('/sua-chua-oi-hong.webp'); }
 
 /* Generic placeholder image style */
 .mock-img-placeholder {
@@ -2267,19 +2187,20 @@ body.cart-open .cart-floating-btn {
 }
 
 .topping-chip {
-  padding: 0.6rem 1.2rem;
-  border-radius: 2rem;
-  background: #fff;
-  border: 1.5px solid color-mix(in srgb, var(--text-color) 10%, transparent);
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  background: var(--bg-color);
+  border: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
   color: var(--text-color);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   user-select: none;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
 
 .topping-chip:hover {

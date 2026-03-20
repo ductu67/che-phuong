@@ -108,6 +108,50 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.closest('button, a, .card-img')) playClickSound();
     });
 
+    // Simple Confetti Effect
+    function launchConfetti() {
+        const count = 40;
+        const defaults = { origin: { y: 0.7 } };
+
+        function fire(particleRatio, opts) {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.style.position = 'fixed';
+            confettiContainer.style.top = '0';
+            confettiContainer.style.left = '0';
+            confettiContainer.style.width = '100%';
+            confettiContainer.style.height = '100%';
+            confettiContainer.style.pointerEvents = 'none';
+            confettiContainer.style.zIndex = '10000';
+            document.body.appendChild(confettiContainer);
+
+            for (let i = 0; i < count * particleRatio; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = Math.random() * 10 + 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.backgroundColor = ['#F48FB1', '#F8BBD0', '#FFEB3B', '#4FC3F7', '#81C784'][Math.floor(Math.random() * 5)];
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = '100vh';
+                particle.style.borderRadius = '50%';
+                confettiContainer.appendChild(particle);
+
+                const animation = particle.animate([
+                    { transform: 'translate3d(0, 0, 0) rotate(0deg)', opacity: 1 },
+                    { transform: `translate3d(${(Math.random() - 0.5) * 400}px, -${Math.random() * 100 + 50}vh, 0) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 1000 + 1000,
+                    easing: 'cubic-bezier(0, .9, .57, 1)'
+                });
+                animation.onfinish = () => particle.remove();
+            }
+            setTimeout(() => confettiContainer.remove(), 2000);
+        }
+
+        fire(0.25, { spread: 26, startVelocity: 55 });
+        fire(0.2, { spread: 60 });
+        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+    }
+
     // ==========================================
     // Shopping Cart & Topping Logic
     // ==========================================
@@ -150,10 +194,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let modalQty = 1;
 
     const availableToppings = [
-        { name: 'Caramen', icon: 'ph-star' },
-        { name: 'Trân châu đen', icon: 'ph-circle' },
-        { name: 'Trân châu giòn', icon: 'ph-circle-dashed' },
-        { name: 'Trân châu nhân dừa', icon: 'ph-nut' }
+        { name: 'Caramen', icon: 'ph-star', price: 5000 },
+        { name: 'Trân châu đen', icon: 'ph-circle', price: 5000 },
+        { name: 'Trân châu giòn', icon: 'ph-circle-dashed', price: 5000 },
+        { name: 'Trân châu nhân dừa', icon: 'ph-nut', price: 8000 }
     ];
     let pendingItemName = null;
 
@@ -208,11 +252,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const div = document.createElement('div');
                 div.className = 'cart-item';
                 const itemPrice = item.price || 0;
-                const toppingPrice = (item.toppings || []).length * 5000;
+                const toppingPrice = (item.selectedToppings || []).reduce((sum, t) => sum + (t.price || 0), 0);
                 const totalForItem = (itemPrice + toppingPrice) * item.qty;
 
-                const toppingText = item.toppings && item.toppings.length > 0 ? 
-                                   `<small style="display:block; color:var(--accent-color)">+ ${item.toppings.join(', ')}</small>` : '';
+                const toppingText = item.selectedToppings && item.selectedToppings.length > 0 ? 
+                                   `<small style="display:block; color:var(--accent-color)">+ ${item.selectedToppings.map(t => t.name).join(', ')}</small>` : '';
                 div.innerHTML = `
                     <div class="cart-item-info">
                         <h4>${item.name}</h4>
@@ -255,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (grandTotalEl) {
             const grandTotal = cart.reduce((sum, item) => {
                 const itemPrice = item.price || 0;
-                const toppingPrice = (item.toppings || []).length * 5000;
+                const toppingPrice = (item.selectedToppings || []).reduce((sum, t) => sum + (t.price || 0), 0);
                 return sum + (itemPrice + toppingPrice) * item.qty;
             }, 0);
             grandTotalEl.textContent = grandTotal.toLocaleString('vi-VN') + 'đ';
@@ -355,7 +399,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 availableToppings.forEach(top => {
                     const chip = document.createElement('div');
                     chip.className = 'topping-chip';
-                    chip.innerHTML = `<i class="ph ${top.icon}"></i> ${top.name}`;
+                    chip.innerHTML = `<i class="ph ${top.icon}"></i> ${top.name} (+${(top.price/1000)}k)`;
+                    chip.dataset.price = top.price;
+                    chip.dataset.name = top.name;
                     chip.addEventListener('click', () => chip.classList.toggle('selected'));
                     modalToppingsContainer.appendChild(chip);
                 });
@@ -397,7 +443,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Collect selected toppings from chips
             const selectedToppings = [];
             modalToppingsContainer.querySelectorAll('.topping-chip.selected').forEach(chip => {
-                selectedToppings.push(chip.textContent.trim());
+                selectedToppings.push({
+                    name: chip.dataset.name,
+                    price: parseInt(chip.dataset.price)
+                });
             });
 
             // Add multiple based on modalQty
@@ -409,13 +458,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function addToCart(name, toppings = [], price = 0) {
-        const existingItem = cart.find(i => i.name === name && JSON.stringify(i.toppings) === JSON.stringify(toppings));
+    function addToCart(name, selectedToppings = [], price = 0) {
+        const existingItem = cart.find(i => i.name === name && JSON.stringify(i.selectedToppings) === JSON.stringify(selectedToppings));
         if (existingItem) {
             existingItem.qty += 1;
         } else {
-            cart.push({ name, qty: 1, toppings, price });
+            cart.push({ name, qty: 1, selectedToppings, price });
         }
+        
+        launchConfetti();
         renderCart();
 
         // Trigger Cart Bounce on all badges
@@ -450,12 +501,12 @@ document.addEventListener('DOMContentLoaded', () => {
         let grandTotal = 0;
         cart.forEach(item => {
             const itemPrice = item.price || 0;
-            const toppingPrice = (item.toppings || []).length * 5000;
+            const toppingPrice = (item.selectedToppings || []).reduce((sum, t) => sum + (t.price || 0), 0);
             const totalForItem = (itemPrice + toppingPrice) * item.qty;
             grandTotal += totalForItem;
 
             orderText += `- ${item.qty} x ${item.name}`;
-            if (item.toppings && item.toppings.length > 0) orderText += ` (Topping: ${item.toppings.join(', ')})`;
+            if (item.selectedToppings && item.selectedToppings.length > 0) orderText += ` (Topping: ${item.selectedToppings.map(t => t.name).join(', ')})`;
             orderText += `: ${totalForItem.toLocaleString('vi-VN')}đ\n`;
         });
         orderText += `\nTổng cộng: ${grandTotal.toLocaleString('vi-VN')}đ`;
