@@ -95,6 +95,9 @@
             <i class="ph ph-magnifying-glass"></i>
             <input type="text" class="menu-search" placeholder="Tìm món ngon...">
         </div>
+        <button id="sound-toggle" class="theme-toggle" aria-label="Bật/Tắt âm thanh" style="margin-right: 0.5rem;">
+            <i class="ph ph-speaker-high"></i>
+        </button>
         <button id="theme-toggle" class="theme-toggle" aria-label="Đổi giao diện Sáng/Tối">
             <i class="ph ph-moon"></i>
         </button>
@@ -752,6 +755,21 @@
 
     <!-- Toast Notification -->
     <div id="toast" class="toast">Đã thêm vào giỏ!</div>
+
+    <!-- PWA Install Banner -->
+    <div id="install-banner" class="install-banner">
+        <div class="install-content">
+            <img src="/logo.svg" alt="App Logo" class="install-logo">
+            <div class="install-text">
+                <strong>Tiệm Chè Phương</strong>
+                <span>Cài đặt ứng dụng để đặt hàng nhanh hơn!</span>
+            </div>
+            <div class="install-actions">
+                <button id="install-btn" class="btn-install">Cài đặt</button>
+                <button id="close-install" class="btn-close-install"><i class="ph ph-x"></i></button>
+            </div>
+        </div>
+    </div>
 
 
     <!-- Image Zoom Lightbox -->

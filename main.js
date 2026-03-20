@@ -77,11 +77,55 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================
-    // Registered Service Worker for PWA
+    // Registered Service Worker for PWA & Install Prompt
     // ==========================================
+    let deferredPrompt;
+    const installBanner = document.getElementById('install-banner');
+    const installBtn = document.getElementById('install-btn');
+    const closeInstallBtn = document.getElementById('close-install');
+
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').catch(err => console.warn('SW register error', err));
+            navigator.serviceWorker.register('/sw.js').then(reg => {
+                console.log('SW Registered');
+            }).catch(err => console.warn('SW register error', err));
+        });
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        // Update UI notify the user they can add to home screen
+        if (installBanner) {
+            setTimeout(() => {
+                installBanner.classList.add('show');
+            }, 3000);
+        }
+    });
+
+    if (installBtn) {
+        installBtn.addEventListener('click', (e) => {
+            if (!deferredPrompt) return;
+            // Show the prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the A2HS prompt');
+                } else {
+                    console.log('User dismissed the A2HS prompt');
+                }
+                deferredPrompt = null;
+                if (installBanner) installBanner.classList.remove('show');
+            });
+        });
+    }
+
+    if (closeInstallBtn) {
+        closeInstallBtn.addEventListener('click', () => {
+            if (installBanner) installBanner.classList.remove('show');
         });
     }
 
@@ -91,7 +135,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         return audioCtx;
     }
+    // Sound Effects logic
+    let soundsEnabled = localStorage.getItem('sounds-enabled') !== 'false';
+    const soundToggle = document.getElementById('sound-toggle');
+    const soundIcon = soundToggle ? soundToggle.querySelector('i') : null;
+
+    function updateSoundIcon() {
+        if (!soundIcon) return;
+        if (soundsEnabled) {
+            soundIcon.className = 'ph ph-speaker-high';
+        } else {
+            soundIcon.className = 'ph ph-speaker-none';
+        }
+    }
+    updateSoundIcon();
+
+    if (soundToggle) {
+        soundToggle.addEventListener('click', () => {
+            soundsEnabled = !soundsEnabled;
+            localStorage.setItem('sounds-enabled', soundsEnabled);
+            updateSoundIcon();
+            if (soundsEnabled) playClickSound();
+        });
+    }
+
     function playClickSound() {
+        if (!soundsEnabled) return;
         const ctx = getAudioCtx();
         if (ctx.state === 'suspended') ctx.resume();
         const osc = ctx.createOscillator();
