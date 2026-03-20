@@ -86,6 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const navInstallBtn = document.getElementById('install-btn-nav');
     const mobileInstallBtn = document.getElementById('install-btn-mobile');
 
+    const iosInstallBanner = document.getElementById('ios-install-banner');
+    const closeIosInstallBtn = document.getElementById('close-ios-install');
+    
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             console.log('PWA: Checking Service Worker Registration');
@@ -95,16 +101,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    if (isIOS) {
+        if (navInstallBtn) navInstallBtn.style.display = 'flex';
+        if (mobileInstallBtn) mobileInstallBtn.style.display = 'flex';
+        
+        // Show iOS instruction modal automatically after 3s on first visit
+        setTimeout(() => {
+            if (!localStorage.getItem('ios-pwa-modal-closed') && iosInstallBanner) {
+                iosInstallBanner.classList.add('show');
+            }
+        }, 3000);
+    }
+
     window.addEventListener('beforeinstallprompt', (e) => {
         console.log('PWA: beforeinstallprompt event fired!');
         e.preventDefault();
         deferredPrompt = e;
         
-        // Show install buttons if available
+        // Show install buttons if available (Android/Chrome)
         if (navInstallBtn) navInstallBtn.style.display = 'flex';
         if (mobileInstallBtn) mobileInstallBtn.style.display = 'flex';
 
-        if (installBanner) {
+        if (installBanner && !isIOS) {
             setTimeout(() => {
                 if (!localStorage.getItem('pwa-banner-closed')) {
                     installBanner.classList.add('show');
@@ -117,7 +135,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!btn) return;
         btn.addEventListener('click', (e) => {
             console.log('PWA: Install clicked');
-            if (deferredPrompt) {
+            if (isIOS) {
+                if (iosInstallBanner) iosInstallBanner.classList.add('show');
+            } else if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
@@ -135,6 +155,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    if (closeIosInstallBtn) {
+        closeIosInstallBtn.addEventListener('click', () => {
+            if (iosInstallBanner) iosInstallBanner.classList.remove('show');
+            localStorage.setItem('ios-pwa-modal-closed', 'true');
+        });
+    }
 
     if (installBtn) {
         installBtn.addEventListener('click', (e) => {

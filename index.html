@@ -32,6 +32,13 @@
     <link rel="stylesheet" href="style.css?v=4">
     <link rel="manifest" href="manifest.json">
     <link rel="preload" href="/hero.webp" as="image">
+    
+    <!-- iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Chè Phương">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    
     <meta name="theme-color" content="#fdf2f2">
     <link rel="canonical" href="https://che-phuong.vercel.app/">
     <!-- Phosphor Icons -->
@@ -758,6 +765,26 @@
 
     <!-- Toast Notification -->
     <div id="toast" class="toast">Đã thêm vào giỏ!</div>
+
+    <!-- iOS Install Banner (Safari only) -->
+    <div id="ios-install-banner" class="ios-install-modal">
+        <div class="ios-modal-content">
+            <button id="close-ios-install" class="close-modal"><i class="ph ph-x"></i></button>
+            <div class="ios-modal-header">
+                <img src="/logo.svg" alt="Chè Phương" class="modal-logo">
+                <div class="modal-title">
+                    <h4>Cài đặt Chè Phương</h4>
+                    <p>Thêm vào màn hình chính</p>
+                </div>
+            </div>
+            <div class="ios-modal-body">
+                <ol>
+                    <li>Nhấn vào biểu tượng <strong>Chia sẻ (Share)</strong> <i class="ph ph-export"></i> ở dưới thanh công cụ của Safari.</li>
+                    <li>Cuộn xuống và chọn <strong>"Thêm vào MH chính" (Add to Home Screen)</strong> <i class="ph ph-plus-square"></i>.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
 
     <!-- PWA Install Banner -->
     <div id="install-banner" class="install-banner">

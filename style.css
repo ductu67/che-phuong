@@ -2554,3 +2554,105 @@ body.cart-open .cart-floating-btn {
     transform: translateX(-50%) translateY(0);
   }
 }
+
+/* 10. iOS Install Modal */
+.ios-install-modal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 5000;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.ios-install-modal.show {
+  display: flex;
+  opacity: 1;
+}
+
+.ios-modal-content {
+  background: var(--bg-color);
+  width: 95%;
+  max-width: 400px;
+  border-radius: 20px 20px 0 0;
+  padding: 2rem;
+  position: relative;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+}
+
+.ios-install-modal.show .ios-modal-content {
+  transform: translateY(0);
+}
+
+.ios-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.ios-modal-header .modal-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.modal-title h4 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--heading-color);
+}
+
+.modal-title p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.ios-modal-body ol {
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.ios-modal-body li {
+  font-size: 1.05rem;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+.ios-modal-body i {
+  color: #007aff;
+  font-size: 1.2rem;
+  vertical-align: middle;
+  margin: 0 0.2rem;
+}
+
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0,0,0,0.05);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-color);
+}
