@@ -1,4 +1,4 @@
-const CACHE_NAME = 'che-phuong-v5'; // Bump version
+const CACHE_NAME = 'che-phuong-v6'; // Bump version
 const ASSETS = [
   '/',
   '/index.html',
@@ -6,6 +6,8 @@ const ASSETS = [
   '/main.js',
   '/manifest.json',
   '/logo.svg',
+  '/icon-192.png',
+  '/icon-512.png',
   '/icon-512.webp',
   '/hero.webp',
   '/saurieng.webp',
