@@ -105,6 +105,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navInstallBtn) navInstallBtn.style.display = 'flex';
         if (mobileInstallBtn) mobileInstallBtn.style.display = 'flex';
         
+        // Toggle correct instruction based on browser
+        const safariContent = document.getElementById('ios-safari-instruction');
+        const nonSafariContent = document.getElementById('ios-not-safari-instruction');
+        
+        if (isSafari) {
+            if (safariContent) safariContent.style.display = 'block';
+            if (nonSafariContent) nonSafariContent.style.display = 'none';
+        } else {
+            // Likely Chrome (CriOS) or other browser on iOS
+            if (safariContent) safariContent.style.display = 'none';
+            if (nonSafariContent) nonSafariContent.style.display = 'block';
+        }
+
         // Show iOS instruction modal automatically after 3s on first visit
         setTimeout(() => {
             if (!localStorage.getItem('ios-pwa-modal-closed') && iosInstallBanner) {
