@@ -807,7 +807,10 @@
                 <span>Cài đặt ứng dụng để đặt hàng nhanh hơn!</span>
             </div>
             <div class="install-actions">
-                <button id="install-btn" class="btn-install">Cài đặt</button>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                    <button id="install-btn" class="btn-install">Cài đặt</button>
+                    <span id="android-fallback-text" style="font-size: 0.7rem; opacity: 0.8; display: none; text-align: right;">Hoặc chọn "Cài đặt ứng dụng" trong menu trình duyệt</span>
+                </div>
                 <button id="close-install" class="btn-close-install"><i class="ph ph-x"></i></button>
             </div>
         </div>

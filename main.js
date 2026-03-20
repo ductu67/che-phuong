@@ -164,6 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 if (installBanner) {
                     installBanner.classList.add('show');
+                    const fallbackText = document.getElementById('android-fallback-text');
+                    if (fallbackText) fallbackText.style.display = 'block';
                 }
             }
         });
