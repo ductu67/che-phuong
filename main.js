@@ -83,26 +83,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const installBanner = document.getElementById('install-banner');
     const installBtn = document.getElementById('install-btn');
     const closeInstallBtn = document.getElementById('close-install');
+    const navInstallBtn = document.getElementById('install-btn-nav');
+    const mobileInstallBtn = document.getElementById('install-btn-mobile');
 
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
+            console.log('PWA: Checking Service Worker Registration');
             navigator.serviceWorker.register('/sw.js').then(reg => {
-                console.log('SW Registered');
-            }).catch(err => console.warn('SW register error', err));
+                console.log('PWA: Service Worker Registered successfully');
+            }).catch(err => console.warn('PWA: SW register error', err));
         });
     }
 
     window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        console.log('PWA: beforeinstallprompt event fired!');
         e.preventDefault();
-        // Stash the event so it can be triggered later.
         deferredPrompt = e;
-        // Update UI notify the user they can add to home screen
+        
+        // Show install buttons if available
+        if (navInstallBtn) navInstallBtn.style.display = 'flex';
+        if (mobileInstallBtn) mobileInstallBtn.style.display = 'flex';
+
         if (installBanner) {
             setTimeout(() => {
-                installBanner.classList.add('show');
+                if (!localStorage.getItem('pwa-banner-closed')) {
+                    installBanner.classList.add('show');
+                }
             }, 3000);
         }
+    });
+
+    [installBtn, navInstallBtn, mobileInstallBtn].forEach(btn => {
+        if (!btn) return;
+        btn.addEventListener('click', (e) => {
+            console.log('PWA: Install clicked');
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the A2HS prompt');
+                        if (navInstallBtn) navInstallBtn.style.display = 'none';
+                        if (mobileInstallBtn) mobileInstallBtn.style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                    if (installBanner) installBanner.classList.remove('show');
+                });
+            } else {
+                if (installBanner) {
+                    installBanner.classList.add('show');
+                }
+            }
+        });
     });
 
     if (installBtn) {
@@ -126,52 +157,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeInstallBtn) {
         closeInstallBtn.addEventListener('click', () => {
             if (installBanner) installBanner.classList.remove('show');
+            localStorage.setItem('pwa-banner-closed', 'true');
         });
     }
 
     // Sound Effects (Web Audio API) - lazy init AudioContext on first interaction
     let audioCtx = null;
-    function getAudioCtx() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        return audioCtx;
-    }
-    // Sound Effects logic
-    let soundsEnabled = localStorage.getItem('sounds-enabled') !== 'false';
-    const soundToggle = document.getElementById('sound-toggle');
-    const soundIcon = soundToggle ? soundToggle.querySelector('i') : null;
-
-    function updateSoundIcon() {
-        if (!soundIcon) return;
-        if (soundsEnabled) {
-            soundIcon.className = 'ph ph-speaker-high';
-        } else {
-            soundIcon.className = 'ph ph-speaker-none';
-        }
-    }
-    updateSoundIcon();
-
-    if (soundToggle) {
-        soundToggle.addEventListener('click', () => {
-            soundsEnabled = !soundsEnabled;
-            localStorage.setItem('sounds-enabled', soundsEnabled);
-            updateSoundIcon();
-            if (soundsEnabled) playClickSound();
-        });
-    }
-
     function playClickSound() {
-        if (!soundsEnabled) return;
-        const ctx = getAudioCtx();
-        if (ctx.state === 'suspended') ctx.resume();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.frequency.setValueAtTime(800, ctx.currentTime);
-        gain.gain.setValueAtTime(0.05, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.1);
+        // Disabled per user request
+        return;
     }
     document.addEventListener('click', (e) => {
         if (e.target.closest('button, a, .card-img')) playClickSound();
