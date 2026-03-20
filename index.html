@@ -801,15 +801,17 @@
     <!-- PWA Install Banner -->
     <div id="install-banner" class="install-banner">
         <div class="install-content">
-            <img src="/logo.svg" alt="App Logo" class="install-logo">
-            <div class="install-text">
-                <strong>Tiệm Chè Phương</strong>
-                <span>Cài đặt ứng dụng để đặt hàng nhanh hơn!</span>
+            <div class="install-main">
+                <img src="/logo.svg" alt="App Logo" class="install-logo">
+                <div class="install-text">
+                    <strong>Tiệm Chè Phương</strong>
+                    <span>Cài đặt ứng dụng để đặt hàng nhanh hơn!</span>
+                </div>
             </div>
             <div class="install-actions">
-                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                <div class="install-action-wrapper">
                     <button id="install-btn" class="btn-install">Cài đặt</button>
-                    <span id="android-fallback-text" style="font-size: 0.7rem; opacity: 0.8; display: none; text-align: right;">Hoặc chọn "Cài đặt ứng dụng" trong menu trình duyệt</span>
+                    <span id="android-fallback-text" style="display: none;">Hoặc chọn "Cài đặt ứng dụng" trong menu trình duyệt</span>
                 </div>
                 <button id="close-install" class="btn-close-install"><i class="ph ph-x"></i></button>
             </div>

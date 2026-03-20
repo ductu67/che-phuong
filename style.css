@@ -2458,18 +2458,20 @@ body.cart-open .cart-floating-btn {
 /* PWA Install Banner */
 .install-banner {
   position: fixed;
-  bottom: 20px;
+  bottom: 25px;
   left: 50%;
   transform: translateX(-50%) translateY(150%);
-  width: 90%;
-  max-width: 500px;
+  width: 95%;
+  max-width: 480px;
   background: var(--card-bg);
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  border-radius: 24px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
   z-index: 5000;
-  padding: 15px;
+  padding: 12px 20px;
   transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 1px solid color-mix(in srgb, var(--accent-color) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 15%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .install-banner.show {
@@ -2479,60 +2481,92 @@ body.cart-open .cart-floating-btn {
 .install-content {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.install-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
 }
 
 .install-logo {
-  width: 50px;
-  height: 50px;
+  width: 42px;
+  height: 42px;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  object-fit: contain;
 }
 
 .install-text {
-  flex: 1;
   display: flex;
   flex-direction: column;
 }
 
 .install-text strong {
   color: var(--heading-color);
-  font-size: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.2;
 }
 
 .install-text span {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
+  line-height: 1.2;
 }
 
 .install-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+}
+
+.install-action-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+#android-fallback-text {
+  font-size: 0.65rem;
+  opacity: 0.7;
+  text-align: right;
+  line-height: 1.1;
+  font-weight: 500;
+  max-width: 130px;
 }
 
 .btn-install {
   background: var(--accent-color);
   color: #fff;
   border: none;
-  padding: 8px 16px;
-  border-radius: 10px;
+  padding: 8px 18px;
+  border-radius: 12px;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: var(--transition);
+  white-space: nowrap;
 }
 
 .btn-install:hover {
   background: var(--accent-hover);
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .btn-close-install {
-  background: none;
+  background: rgba(0,0,0,0.05);
   border: none;
   color: var(--text-color);
-  font-size: 1.2rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   opacity: 0.6;
   transition: var(--transition);
@@ -2540,18 +2574,39 @@ body.cart-open .cart-floating-btn {
 
 .btn-close-install:hover {
   opacity: 1;
+  background: rgba(0,0,0,0.1);
   color: var(--accent-color);
 }
 
 @media (max-width: 768px) {
   .install-banner {
-    top: 15px;
+    top: 10px;
     bottom: auto;
+    width: 95%;
+    padding: 12px;
     transform: translateX(-50%) translateY(-150%);
   }
   
   .install-banner.show {
     transform: translateX(-50%) translateY(0);
+  }
+
+  .install-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .install-text strong {
+    font-size: 0.95rem;
+  }
+
+  .install-text span {
+    font-size: 0.75rem;
+  }
+
+  .btn-install {
+    padding: 6px 14px;
+    font-size: 0.85rem;
   }
 }
 
