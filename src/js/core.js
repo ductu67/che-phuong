@@ -1,4 +1,8 @@
+import { injectSEOMenuSchema } from './data.js';
+
 export function initCore() {
+    injectSEOMenuSchema();
+
     // 0. Preloader Logic
     const preloader = document.getElementById('preloader');
     window.addEventListener('load', () => {

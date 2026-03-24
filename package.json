@@ -13,5 +13,8 @@
     "vite": "^8.0.0",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-pwa": "^1.2.0"
+  },
+  "dependencies": {
+    "@phosphor-icons/web": "^2.1.2"
   }
 }

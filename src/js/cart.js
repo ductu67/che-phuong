@@ -1,4 +1,5 @@
 import { launchConfetti } from './ui.js';
+import { getMenuData } from './data.js';
 
 export function initCart() {
     let cart = JSON.parse(localStorage.getItem('che-phuong-cart') || '[]');
@@ -124,31 +125,36 @@ export function initCart() {
     document.querySelectorAll('.card').forEach(card => {
         card.addEventListener('click', (e) => {
             // Remove the early return so clicking "Add to cart" button still opens the modal
+            const id = card.dataset.id;
+            const product = getMenuData(id);
             
-            const name = card.querySelector('h3').textContent;
-            const desc = card.querySelector('p').textContent;
-            const priceEl = card.querySelector('.card-price') || card.querySelector('.new-price');
-            const priceText = priceEl?.textContent || '0đ';
-            
-            const imgEl = card.querySelector('.card-img');
-            let imgSrc = '';
-            if (imgEl) {
-                if (imgEl.tagName.toLowerCase() === 'img') {
-                    imgSrc = imgEl.src;
-                } else {
-                    const style = window.getComputedStyle(imgEl);
-                    imgSrc = style.backgroundImage.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
-                }
+            if (!product) {
+                console.error("Product not found for id:", id);
+                return;
             }
 
-            elements.modalProductName.textContent = name;
-            elements.modalProductDesc.textContent = desc;
-            elements.modalProductPrice.textContent = priceText;
+            elements.modalProductName.textContent = product.name;
+            elements.modalProductDesc.textContent = product.desc;
+            elements.modalProductPrice.textContent = product.price.toLocaleString('vi-VN') + 'đ';
             
             const modalImgContainer = document.querySelector('.product-detail-image');
             const modalGrid = document.querySelector('.product-detail-grid');
             const modalContent = document.querySelector('.product-detail-content');
             
+            // We use the image from data, but fallback to DOM if empty
+            let imgSrc = product.image;
+            if (!imgSrc) {
+                const imgEl = card.querySelector('.card-img');
+                if (imgEl) {
+                    if (imgEl.tagName.toLowerCase() === 'img') {
+                        imgSrc = imgEl.src;
+                    } else {
+                        const style = window.getComputedStyle(imgEl);
+                        imgSrc = style.backgroundImage.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+                    }
+                }
+            }
+
             if (imgSrc && imgSrc !== 'none') {
                 elements.modalProductImg.src = imgSrc;
                 if (modalImgContainer) modalImgContainer.style.display = 'block';
@@ -161,10 +167,15 @@ export function initCart() {
                 if (modalContent) modalContent.classList.add('no-image-content');
             }
             
-            // Generate category name dynamically from section header if needed
-            const parentSection = card.closest('.menu-section');
-            const catName = parentSection ? parentSection.querySelector('h2').textContent : "Phổ biến";
-            elements.modalProductBadge.textContent = catName;
+            // Generate category name
+            const categoryNames = {
+                'combos': 'Combo',
+                'modern': 'Kiểu mới',
+                'traditional': 'Truyền thống',
+                'yogurt': 'Sữa chua',
+                'drinks': 'Đồ uống'
+            };
+            elements.modalProductBadge.textContent = categoryNames[product.category] || "Phổ biến";
             
             modalQty = 1;
             elements.modalQtyValue.textContent = modalQty;
@@ -173,8 +184,7 @@ export function initCart() {
             elements.productOverlay.classList.add('active');
 
             // Toppings Logic
-            const needsTopping = name.includes('Chè') || name.includes('Sữa Chua') || name.includes('Sương Sáo') || name.includes('Trà');
-            if (needsTopping && !name.includes('Combo')) {
+            if (product.needsTopping) {
                 elements.modalToppingsSection.style.display = 'block';
                 elements.modalToppingsContainer.innerHTML = '';
                 availableToppings.forEach(top => {
