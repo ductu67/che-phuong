@@ -1,9 +1,33 @@
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import viteCompression from 'vite-plugin-compression';
+import fs from 'fs';
+import path from 'path';
+
+function htmlPartials() {
+  return {
+    name: 'html-partials',
+    enforce: 'pre',
+    handleHotUpdate({ file, server }) {
+      if (file.endsWith('.html')) {
+        server.ws.send({ type: 'full-reload', path: '*' });
+      }
+    },
+    transformIndexHtml(html) {
+      return html.replace(/<include\s+src="([^"]+)"\s*\/>/g, (match, src) => {
+        const filePath = path.resolve(__dirname, src);
+        if (fs.existsSync(filePath)) {
+          return fs.readFileSync(filePath, 'utf-8');
+        }
+        return match;
+      });
+    }
+  };
+}
 
 export default defineConfig({
   plugins: [
+    htmlPartials(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'logo.svg', 'apple-touch-icon.png', 'hero.webp', 'icon-*.png', 'icon-*.webp', '*.webp'],
