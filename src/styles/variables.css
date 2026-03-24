@@ -1,0 +1,25 @@
+:root {
+  --primary-color: #F8BBD0; /* Light Pink #F8BBD0 */
+  --accent-color: #F48FB1; /* Darker Pink #F48FB1 */
+  --accent-hover: #F06292; /* Even Darker Pink for Hover */
+  --primary-hover: #FCE4EC;
+  --bg-color: #FFF9F9; /* Cream White #FFF9F9 */
+  --text-color: #5D4037; /* Brownish #5D4037 */
+  --heading-color: #4E342E;
+  --card-bg: #FFFFFF;
+  --card-shadow: 0 10px 20px rgba(244, 143, 177, 0.15); /* Pinkish shadow */
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-main: 'Quicksand', sans-serif;
+  --border-radius: 20px;
+}
+
+body.dark-mode {
+  /* Dark Mode Palette */
+  --bg-color: #121212;
+  --text-color: #F5F5F5;
+  --text-muted: #BDBDBD;
+  --accent-color: #F48FB1;
+  --accent-hover: #F8BBD0;
+  --card-bg: #1E1E1E;
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
