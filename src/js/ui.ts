@@ -165,23 +165,30 @@ export function initUI() {
     createBubbles();
 }
 
+import confetti from 'canvas-confetti';
+
 export function launchConfetti() {
-    const count = 40;
-    const confettiContainer = document.createElement('div');
-    confettiContainer.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10000;';
-    document.body.appendChild(confettiContainer);
+    const duration = 2000;
+    const end = Date.now() + duration;
 
-    for (let i = 0; i < count; i++) {
-        const particle = document.createElement('div');
-        particle.style.cssText = `position:absolute;width:${Math.random()*10+5}px;height:${Math.random()*10+5}px;border-radius:50%;top:100vh;`;
-        particle.style.backgroundColor = ['#F48FB1', '#F8BBD0', '#FFEB3B', '#4FC3F7', '#81C784'][Math.floor(Math.random() * 5)];
-        particle.style.left = Math.random() * 100 + 'vw';
-        confettiContainer.appendChild(particle);
+    (function frame() {
+        confetti({
+            particleCount: 5,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: ['#F48FB1', '#F8BBD0', '#FFEB3B', '#4FC3F7', '#81C784']
+        });
+        confetti({
+            particleCount: 5,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: ['#F48FB1', '#F8BBD0', '#FFEB3B', '#4FC3F7', '#81C784']
+        });
 
-        particle.animate([
-            { transform: 'translate3d(0, 0, 0) rotate(0deg)', opacity: 1 },
-            { transform: `translate3d(${(Math.random()-0.5)*400}px, -${Math.random()*100+50}vh, 0) rotate(${Math.random()*360}deg)`, opacity: 0 }
-        ], { duration: Math.random()*1000+1000, easing: 'cubic-bezier(0, .9, .57, 1)' }).onfinish = () => particle.remove();
-    }
-    setTimeout(() => confettiContainer.remove(), 2000);
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    }());
 }

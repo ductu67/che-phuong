@@ -87,7 +87,7 @@
   box-shadow: 0 0 10px var(--accent-color);
 }
 
-body.dark-mode {
+html.dark-mode, body.dark-mode {
   /* Dark Mode Palette */
   --bg-color: #121212;
   --text-color: #F5F5F5;

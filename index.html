@@ -22,17 +22,26 @@
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        // FOUC Prevention for Dark Mode
+        (function() {
+            try {
+                var theme = localStorage.getItem('theme');
+                if (theme) {
+                    document.documentElement.classList.add(theme);
+                } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark-mode');
+                } else {
+                    document.documentElement.classList.add('light-mode');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <!-- Local Web Fonts bundled via main.ts -->
     <link rel="stylesheet" href="style.css?v=4">
     <link rel="manifest" href="manifest.json">
     <link rel="preload" href="/hero.webp" as="image">
-    
     <!-- iOS PWA Support -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -71,7 +80,7 @@
     </script>
 </head>
 
-<body class="light-mode">
+<body>
     <div id="preloader">
         <div class="preloader-content">
             <img src="/logo.svg" alt="Loading..." class="preloader-logo">
@@ -216,7 +225,7 @@
 
 
 
-    <script type="module" src="/main.js"></script>
+    <script type="module" src="/main.ts"></script>
 
     <!-- Social Proof Notification -->
     <div id="social-proof" class="social-proof"></div>

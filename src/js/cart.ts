@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { launchConfetti } from './ui.js';
 import { getMenuData } from './data.js';
 
@@ -43,7 +44,7 @@ export function initCart() {
 
     function renderCart() {
         if (!elements.cartItemsContainer) return;
-        
+
         if (cart.length === 0) {
             elements.cartItemsContainer.innerHTML = '<p class="empty-cart-msg">Giỏ hàng đang trống.</p>';
             if (elements.checkoutBtn) elements.checkoutBtn.disabled = true;
@@ -56,9 +57,9 @@ export function initCart() {
                 const toppingPrice = (item.selectedToppings || []).reduce((sum, t) => sum + (t.price || 0), 0);
                 const totalForItem = (itemPrice + toppingPrice) * item.qty;
 
-                const toppingText = item.selectedToppings?.length > 0 ? 
+                const toppingText = item.selectedToppings?.length > 0 ?
                     `<small style="display:block; color:var(--accent-color)">+ ${item.selectedToppings.map(t => t.name).join(', ')}</small>` : '';
-                
+
                 div.innerHTML = `
                     <div class="cart-item-info">
                         <h4>${item.name}</h4>
@@ -104,7 +105,7 @@ export function initCart() {
         elements.cartBadges.forEach(badge => badge.textContent = totalItems);
         const totalEl = document.getElementById('cart-grand-total');
         if (totalEl) totalEl.textContent = grandTotal.toLocaleString('vi-VN') + 'đ';
-        
+
         localStorage.setItem('che-phuong-cart', JSON.stringify(cart));
     }
 
@@ -121,13 +122,29 @@ export function initCart() {
         el?.addEventListener('click', toggleCart);
     });
 
-    // Product Modal & Add Actions
+    function openProductModal() {
+        const performOpen = () => {
+            elements.productModal.classList.add('active');
+            elements.productOverlay.classList.add('active');
+        };
+        if (document.startViewTransition) document.startViewTransition(performOpen);
+        else performOpen();
+    }
+
+    function closeProductModal() {
+        const performClose = () => {
+            elements.productModal.classList.remove('active');
+            elements.productOverlay.classList.remove('active');
+        };
+        if (document.startViewTransition) document.startViewTransition(performClose);
+        else performClose();
+    }
+
     document.querySelectorAll('.card').forEach(card => {
         card.addEventListener('click', (e) => {
-            // Remove the early return so clicking "Add to cart" button still opens the modal
             const id = card.dataset.id;
             const product = getMenuData(id);
-            
+
             if (!product) {
                 console.error("Product not found for id:", id);
                 return;
@@ -136,12 +153,11 @@ export function initCart() {
             elements.modalProductName.textContent = product.name;
             elements.modalProductDesc.textContent = product.desc;
             elements.modalProductPrice.textContent = product.price.toLocaleString('vi-VN') + 'đ';
-            
+
             const modalImgContainer = document.querySelector('.product-detail-image');
             const modalGrid = document.querySelector('.product-detail-grid');
             const modalContent = document.querySelector('.product-detail-content');
-            
-            // We use the image from data, but fallback to DOM if empty
+
             let imgSrc = product.image;
             if (!imgSrc) {
                 const imgEl = card.querySelector('.card-img');
@@ -166,8 +182,7 @@ export function initCart() {
                 if (modalGrid) modalGrid.classList.add('no-image');
                 if (modalContent) modalContent.classList.add('no-image-content');
             }
-            
-            // Generate category name
+
             const categoryNames = {
                 'combos': 'Combo',
                 'modern': 'Kiểu mới',
@@ -176,21 +191,19 @@ export function initCart() {
                 'drinks': 'Đồ uống'
             };
             elements.modalProductBadge.textContent = categoryNames[product.category] || "Phổ biến";
-            
+
             modalQty = 1;
             elements.modalQtyValue.textContent = modalQty;
-            
-            elements.productModal.classList.add('active');
-            elements.productOverlay.classList.add('active');
 
-            // Toppings Logic
+            openProductModal();
+
             if (product.needsTopping) {
                 elements.modalToppingsSection.style.display = 'block';
                 elements.modalToppingsContainer.innerHTML = '';
                 availableToppings.forEach(top => {
                     const chip = document.createElement('div');
                     chip.className = 'topping-chip';
-                    chip.innerHTML = `<i class="ph ${top.icon}"></i> ${top.name} (+${(top.price/1000)}k)`;
+                    chip.innerHTML = `<i class="ph ${top.icon}"></i> ${top.name} (+${(top.price / 1000)}k)`;
                     chip.dataset.price = top.price;
                     chip.dataset.name = top.name;
                     chip.addEventListener('click', () => chip.classList.toggle('selected'));
@@ -203,14 +216,19 @@ export function initCart() {
         });
     });
 
-    // Close Modal Logic
-    elements.closeProductBtn?.addEventListener('click', () => {
-        elements.productModal.classList.remove('active');
-        elements.productOverlay.classList.remove('active');
-    });
-    elements.productOverlay?.addEventListener('click', () => {
-        elements.productModal.classList.remove('active');
-        elements.productOverlay.classList.remove('active');
+    // Close Modal Logic & Keyboard Access
+    elements.closeProductBtn?.addEventListener('click', closeProductModal);
+    elements.productOverlay?.addEventListener('click', closeProductModal);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (elements.productModal.classList.contains('active')) {
+                closeProductModal();
+            }
+            if (elements.cartModal.classList.contains('active')) {
+                toggleCart();
+            }
+        }
     });
 
     elements.modalQtyPlus?.addEventListener('click', () => elements.modalQtyValue.textContent = ++modalQty);
@@ -231,15 +249,15 @@ export function initCart() {
             price: parseInt(chip.dataset.price)
         }));
 
-        for(let i=0; i<modalQty; i++) {
+        for (let i = 0; i < modalQty; i++) {
             const existing = cart.find(item => item.name === name && JSON.stringify(item.selectedToppings) === JSON.stringify(selectedToppings));
             if (existing) existing.qty += 1;
             else cart.push({ name, qty: 1, selectedToppings, price });
         }
-        
+
         launchConfetti();
         renderCart();
-        
+
         // Trigger Cart Bounce on all badges
         const cartTargets = document.querySelectorAll('.nav-cart-btn, #cart-floating-btn');
         cartTargets.forEach(target => {
@@ -277,7 +295,7 @@ export function initCart() {
         });
         const notes = elements.deliveryNotesInput?.value.trim();
         if (notes) orderText += `\n📝 Ghi chú: ${notes}`;
-        
+
         navigator.clipboard.writeText(orderText).then(() => {
             window.location.href = 'https://m.me/phuong.nguyen.298061';
         });

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import viteCompression from 'vite-plugin-compression';
+import purgecss from 'vite-plugin-purgecss';
 import fs from 'fs';
 import path from 'path';
 
@@ -15,7 +16,7 @@ function htmlPartials() {
     },
     transformIndexHtml(html) {
       return html.replace(/<include\s+src="([^"]+)"\s*\/>/g, (match, src) => {
-        const filePath = path.resolve(__dirname, src);
+        const filePath = path.resolve(process.cwd(), src);
         if (fs.existsSync(filePath)) {
           return fs.readFileSync(filePath, 'utf-8');
         }
@@ -28,6 +29,7 @@ function htmlPartials() {
 export default defineConfig({
   plugins: [
     htmlPartials(),
+    purgecss(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'logo.svg', 'apple-touch-icon.png', 'hero.webp', 'icon-*.png', 'icon-*.webp', '*.webp'],

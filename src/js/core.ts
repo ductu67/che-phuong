@@ -25,14 +25,13 @@ export function initCore() {
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = themeToggle?.querySelector('i');
 
-    const currentTheme = localStorage.getItem('theme') || 'light-mode';
-    document.body.classList.remove('light-mode', 'dark-mode');
-    document.body.classList.add(currentTheme);
+    const currentTheme = document.documentElement.className.match(/dark-mode|light-mode/)?.[0] || 'light-mode';
     if (themeIcon) updateThemeIcon(themeIcon, currentTheme);
 
     themeToggle?.addEventListener('click', () => {
-        const newTheme = document.body.classList.contains('light-mode') ? 'dark-mode' : 'light-mode';
-        document.body.classList.replace(newTheme === 'dark-mode' ? 'light-mode' : 'dark-mode', newTheme);
+        const newTheme = document.documentElement.classList.contains('light-mode') ? 'dark-mode' : 'light-mode';
+        document.documentElement.classList.remove('light-mode', 'dark-mode');
+        document.documentElement.classList.add(newTheme);
         localStorage.setItem('theme', newTheme);
         if (themeIcon) updateThemeIcon(themeIcon, newTheme);
     });
