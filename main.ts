@@ -8,10 +8,14 @@ import '@phosphor-icons/web/regular';
 import '@phosphor-icons/web/fill';
 import { initCore } from './src/js/core';
 import { initPWA } from './src/js/pwa';
+import { loadCMSAndRender } from './src/js/cms';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     initCore();
     initPWA();
+    
+    // Tải Dữ liệu từ Google Sheets hoặc Local Data
+    await loadCMSAndRender();
 
     // Fast render badge before heavy cart JS loads
     try {

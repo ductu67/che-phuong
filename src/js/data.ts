@@ -293,6 +293,15 @@ export function getMenuData(id) {
     return menuData[id] || null;
 }
 
+export function updateMenuData(newData) {
+    // Xóa ruột cũ
+    for (let key in menuData) {
+        delete menuData[key];
+    }
+    // Chắp vá ruột mới từ Google Sheets
+    Object.assign(menuData, newData);
+}
+
 export function injectSEOMenuSchema() {
     const items = Object.values(menuData).map((item, index) => ({
         "@type": "MenuItem",
