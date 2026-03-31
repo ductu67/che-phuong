@@ -4,7 +4,7 @@ export const menuData = {
         "name": "Combo Sống Thảnh Thơi",
         "desc": "2 Chè Sầu Riêng + 1 Chè Bơ. Một bữa tiệc hương vị béo ngậy, ngọt thanh cho nhóm bạn.",
         "price": 70000,
-        "image": "/hero.webp",
+        "image": "",
         "category": "combos",
         "needsTopping": false
     },
@@ -13,7 +13,7 @@ export const menuData = {
         "name": "Combo Cặp Đôi Hoàn Hảo",
         "desc": "1 Chè Xoài Hồng Kông + 1 Sữa Chua Mít. Sự cân bằng giữa vị ngọt dịu và chua thanh.",
         "price": 45000,
-        "image": "/hero.webp",
+        "image": "",
         "category": "combos",
         "needsTopping": false
     },
@@ -22,7 +22,7 @@ export const menuData = {
         "name": "Combo Trà & Chè",
         "desc": "1 Trà Tắc Xí Muội + 1 Chè Ngọc Thạch. Kết hợp chua thanh và ngọt mát — chuẩn combo giải\r\n                            nhiệt.",
         "price": 30000,
-        "image": "/hero.webp",
+        "image": "",
         "category": "combos",
         "needsTopping": false
     },
@@ -31,7 +31,7 @@ export const menuData = {
         "name": "Combo Healthy Chua Ngọt",
         "desc": "1 Sữa Chua Chanh Leo + 1 Sữa Chua Hoa Quả. Hai vị chua thanh hòa quyện, nhẹ ngọt và rất tươi.",
         "price": 45000,
-        "image": "/hero.webp",
+        "image": "",
         "category": "combos",
         "needsTopping": false
     },
@@ -40,7 +40,7 @@ export const menuData = {
         "name": "Combo Matcha & Chè",
         "desc": "1 Matcha Latte + 1 Chè Khúc Bạch. Đắng nhẹ của matcha hòa cùng khúc bạch béo mềm — combo sang\r\n                            chảnh nhất tiệm.",
         "price": 45000,
-        "image": "/hero.webp",
+        "image": "",
         "category": "combos",
         "needsTopping": false
     },

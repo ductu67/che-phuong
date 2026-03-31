@@ -58,7 +58,7 @@ export function initUI() {
 
     function closeLightbox() {
         lightbox?.classList.remove('active');
-        setTimeout(() => { if (lightboxImg) lightboxImg.src = ''; }, 300);
+        setTimeout(() => { if (lightboxImg) (lightboxImg as HTMLImageElement).src = ''; }, 300);
     }
     closeLightboxBtn?.addEventListener('click', closeLightbox);
     lightbox?.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
@@ -104,7 +104,7 @@ export function initUI() {
                         if (href === current) {
                             link.classList.add('active');
                             if (catLinksWrapper) {
-                                const scrollLeft = link.offsetLeft - catLinksWrapper.offsetWidth / 2 + link.offsetWidth / 2;
+                                const scrollLeft = (link as HTMLElement).offsetLeft - (catLinksWrapper as HTMLElement).offsetWidth / 2 + (link as HTMLElement).offsetWidth / 2;
                                 catLinksWrapper.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
                             }
                         } else {

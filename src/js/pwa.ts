@@ -6,7 +6,7 @@ export function initPWA() {
     const mobileInstallBtn = document.getElementById('install-btn-mobile');
     const iosInstallBanner = document.getElementById('ios-install-banner');
     
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
     // Service Worker registration is now handled automatically by vite-plugin-pwa plugin during build.

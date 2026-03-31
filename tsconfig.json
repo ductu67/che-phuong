@@ -17,7 +17,7 @@
     "strict": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noFallfallCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src/**/*.ts",
