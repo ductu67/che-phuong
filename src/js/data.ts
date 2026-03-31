@@ -4,7 +4,7 @@ export const menuData = {
         "name": "Combo Sống Thảnh Thơi",
         "desc": "2 Chè Sầu Riêng + 1 Chè Bơ. Một bữa tiệc hương vị béo ngậy, ngọt thanh cho nhóm bạn.",
         "price": 70000,
-        "image": "",
+        "image": "/hero.webp",
         "category": "combos",
         "needsTopping": false
     },
@@ -13,7 +13,7 @@ export const menuData = {
         "name": "Combo Cặp Đôi Hoàn Hảo",
         "desc": "1 Chè Xoài Hồng Kông + 1 Sữa Chua Mít. Sự cân bằng giữa vị ngọt dịu và chua thanh.",
         "price": 45000,
-        "image": "",
+        "image": "/hero.webp",
         "category": "combos",
         "needsTopping": false
     },
@@ -22,7 +22,7 @@ export const menuData = {
         "name": "Combo Trà & Chè",
         "desc": "1 Trà Tắc Xí Muội + 1 Chè Ngọc Thạch. Kết hợp chua thanh và ngọt mát — chuẩn combo giải\r\n                            nhiệt.",
         "price": 30000,
-        "image": "",
+        "image": "/hero.webp",
         "category": "combos",
         "needsTopping": false
     },
@@ -31,7 +31,7 @@ export const menuData = {
         "name": "Combo Healthy Chua Ngọt",
         "desc": "1 Sữa Chua Chanh Leo + 1 Sữa Chua Hoa Quả. Hai vị chua thanh hòa quyện, nhẹ ngọt và rất tươi.",
         "price": 45000,
-        "image": "",
+        "image": "/hero.webp",
         "category": "combos",
         "needsTopping": false
     },
@@ -40,7 +40,7 @@ export const menuData = {
         "name": "Combo Matcha & Chè",
         "desc": "1 Matcha Latte + 1 Chè Khúc Bạch. Đắng nhẹ của matcha hòa cùng khúc bạch béo mềm — combo sang\r\n                            chảnh nhất tiệm.",
         "price": 45000,
-        "image": "",
+        "image": "/hero.webp",
         "category": "combos",
         "needsTopping": false
     },
@@ -49,7 +49,7 @@ export const menuData = {
         "name": "Matcha Latte",
         "desc": "Trà xanh Nhật Bản đậm vị chan lẫn sữa tươi thơm béo và bọt kem mịn màng.",
         "price": 25000,
-        "image": "",
+        "image": "/matcha-latte.webp",
         "category": "drinks",
         "needsTopping": true
     },
@@ -58,7 +58,7 @@ export const menuData = {
         "name": "Trà Quất Nha Đam",
         "desc": "Vị chua thanh của quất hòa với nha đam giòn tan, thanh mát giải nhiệt mùa hè.",
         "price": 15000,
-        "image": "",
+        "image": "/tra-quat-nhadam.webp",
         "category": "drinks",
         "needsTopping": true
     },
@@ -67,7 +67,7 @@ export const menuData = {
         "name": "Trà Chanh",
         "desc": "Hương vị trà đen nguyên bản kết hợp chanh tươi mộc mạc và sảng khoái.",
         "price": 15000,
-        "image": "",
+        "image": "/tra-chanh.webp",
         "category": "drinks",
         "needsTopping": true
     },
@@ -76,7 +76,7 @@ export const menuData = {
         "name": "Trà Tắc Xí Muội",
         "desc": "Trà ủ sậm màu với tắc thơm lừng thêm viên xí muội mặn mặn chua chua độc đáo.",
         "price": 20000,
-        "image": "",
+        "image": "/tra-tac-ximuoi.webp",
         "category": "drinks",
         "needsTopping": true
     },
@@ -85,7 +85,7 @@ export const menuData = {
         "name": "Trà Thái Xanh",
         "desc": "Trà Thái xanh thơm mát với sữa đặc béo nhẹ, thêm chút hương vani dịu dàng khó cưỡng.",
         "price": 20000,
-        "image": "",
+        "image": "/tra-thai-xanh.webp",
         "category": "drinks",
         "needsTopping": true
     },
@@ -94,7 +94,7 @@ export const menuData = {
         "name": "Sữa Chua Đánh Đá",
         "desc": "Sữa chua tươi đánh bông mịn, đá xay lạnh sảng khoái — giải nhiệt nhanh nhất hè này.",
         "price": 25000,
-        "image": "",
+        "image": "/sua-chua-danh-da.webp",
         "category": "drinks",
         "needsTopping": true
     },
@@ -103,7 +103,7 @@ export const menuData = {
         "name": "Sữa Chua Việt Quất",
         "desc": "Sữa chua chua dịu kết hợp việt quất tím đậm antioxidant, vừa ngon vừa healthy.",
         "price": 25000,
-        "image": "",
+        "image": "/sua-chua-viet-quat.webp",
         "category": "drinks",
         "needsTopping": true
     },
@@ -112,7 +112,7 @@ export const menuData = {
         "name": "Sữa Chua Chanh Leo",
         "desc": "Chanh leo chua thanh bùng nổ hòa vào lớp sữa chua mịn mượt, cực mát và đã khát.",
         "price": 25000,
-        "image": "",
+        "image": "/sua-chua-chanh-leo.webp",
         "category": "drinks",
         "needsTopping": true
     },
@@ -121,7 +121,7 @@ export const menuData = {
         "name": "Sữa Chua Dâu Tây",
         "desc": "Dâu tây đỏ mọng đậm hương, hòa quyện cùng sữa chua trắng tinh khiết — màu sắc và vị đều đỉnh.",
         "price": 25000,
-        "image": "",
+        "image": "/sua-chua-dau-tay.webp",
         "category": "drinks",
         "needsTopping": true
     },
@@ -130,7 +130,7 @@ export const menuData = {
         "name": "Sữa Chua Ổi Hồng",
         "desc": "Ổi hồng giòn thơm đặc trưng, kết hợp sữa chua tươi mát — vị ngọt nhẹ rất đặc biệt.",
         "price": 25000,
-        "image": "",
+        "image": "/sua-chua-oi-hong.webp",
         "category": "drinks",
         "needsTopping": true
     },
@@ -139,7 +139,7 @@ export const menuData = {
         "name": "Chè Sầu Riêng",
         "desc": "Sầu riêng tươi xay nhuyễn, thạch dai giòn kết hợp nước cốt dừa thơm béo, vị ngọt thanh dễ\r\n                            chịu.",
         "price": 25000,
-        "image": "",
+        "image": "/saurieng.webp",
         "category": "modern",
         "needsTopping": true
     },
@@ -148,7 +148,7 @@ export const menuData = {
         "name": "Chè Xoài Hồng Kông",
         "desc": "Xoài cát chín tự nhiên, trân châu trắng và cốt dừa mang lại hương vị ngọt dịu thanh mát.",
         "price": 25000,
-        "image": "",
+        "image": "/xoai.webp",
         "category": "modern",
         "needsTopping": true
     },
@@ -157,7 +157,7 @@ export const menuData = {
         "name": "Chè Ngọc Thạch",
         "desc": "Các loại thạch rực rỡ, dai dai giòn giòn cùng nước dùng sữa dừa phảng phất hương hoa bưởi.",
         "price": 15000,
-        "image": "",
+        "image": "/ngocthach.webp",
         "category": "modern",
         "needsTopping": true
     },
@@ -166,7 +166,7 @@ export const menuData = {
         "name": "Chè Khoai Dẻo",
         "desc": "Khoai lang tím, vàng dẻo bùi xắt hạt lựu hòa quyện vị thanh mát cốt dừa.",
         "price": 20000,
-        "image": "",
+        "image": "/khoaideo.webp",
         "category": "modern",
         "needsTopping": true
     },
@@ -175,7 +175,7 @@ export const menuData = {
         "name": "Chè Khúc Bạch Nhãn",
         "desc": "Những viên khúc bạch phô mai mềm tan cùng độ ngọt thanh của nhãn lồng giòn sần sật.",
         "price": 25000,
-        "image": "",
+        "image": "/khucbach.webp",
         "category": "modern",
         "needsTopping": true
     },
@@ -184,7 +184,7 @@ export const menuData = {
         "name": "Chè Dừa Non",
         "desc": "Nước cốt dừa thơm, thạch lá dứa núng nính, và sợi dừa non sần sật ít ngọt.",
         "price": 25000,
-        "image": "",
+        "image": "/duanon.webp",
         "category": "modern",
         "needsTopping": true
     },
@@ -193,7 +193,7 @@ export const menuData = {
         "name": "Chè Bơ",
         "desc": "Bơ dằm béo xốp kết hợp thạch phô mai và sữa tươi thanh nhẹ.",
         "price": 25000,
-        "image": "",
+        "image": "/bo.webp",
         "category": "modern",
         "needsTopping": true
     },
@@ -202,7 +202,7 @@ export const menuData = {
         "name": "Sương Sáo Trân Châu Cốt Dừa",
         "desc": "Sương sáo thanh mát đen nhánh, trân châu dẻo bùi kết hợp cốt dừa.",
         "price": 15000,
-        "image": "",
+        "image": "/suongsao.webp",
         "category": "modern",
         "needsTopping": true
     },
@@ -211,7 +211,7 @@ export const menuData = {
         "name": "Chè Thập Cẩm",
         "desc": "Tuyển tập đậu đỏ, đậu đen, thạch đen, dừa khô quyện bùi và nước cốt mộc mạc.",
         "price": 20000,
-        "image": "",
+        "image": "/thapcam.webp",
         "category": "traditional",
         "needsTopping": true
     },
@@ -220,7 +220,7 @@ export const menuData = {
         "name": "Chè Bưởi",
         "desc": "Cùi bưởi giòn sần sật, dẻo quẹo đậu xanh đánh nhuyễn mịn màng.",
         "price": 20000,
-        "image": "",
+        "image": "/buoi.webp",
         "category": "traditional",
         "needsTopping": true
     },
@@ -229,7 +229,7 @@ export const menuData = {
         "name": "Chè Đỗ Đen Trân Châu Dừa",
         "desc": "Đỗ đen hầm nhừ ngọt thanh ăn kèm trân châu bọc dừa tươi dai sần sật.",
         "price": 15000,
-        "image": "",
+        "image": "/doden.webp",
         "category": "traditional",
         "needsTopping": true
     },
@@ -238,7 +238,7 @@ export const menuData = {
         "name": "Chè Ngô Dừa Non",
         "desc": "Ngô luộc dẻo mềm, cốt dừa thơm lừng, giữ trọn vị ngọt tự nhiên của ngô non.",
         "price": 15000,
-        "image": "",
+        "image": "/ngo.webp",
         "category": "traditional",
         "needsTopping": true
     },
@@ -247,7 +247,7 @@ export const menuData = {
         "name": "Chè Cốm Dừa Non",
         "desc": "Hương cốm xanh thoang thoảng mùa thu Hà Nội, quấn quýt cùng dừa non thanh tao.",
         "price": 15000,
-        "image": "",
+        "image": "/com.webp",
         "category": "traditional",
         "needsTopping": true
     },
@@ -256,7 +256,7 @@ export const menuData = {
         "name": "Sữa Chua Mít",
         "desc": "Mít vàng dai giòn thơm tự nhiên, thạch sương sáo thanh mát trộn sữa chua chua dịu.",
         "price": 20000,
-        "image": "",
+        "image": "/suachuamit.webp",
         "category": "yogurt",
         "needsTopping": true
     },
@@ -265,7 +265,7 @@ export const menuData = {
         "name": "Sữa Chua Nếp Cẩm",
         "desc": "Nếp cẩm ủ men thơm nồng bùi bùi, ăn kèm sữa chua thanh mát ít ngọt.",
         "price": 25000,
-        "image": "",
+        "image": "/suachuanepcam.webp",
         "category": "yogurt",
         "needsTopping": true
     },
@@ -274,7 +274,7 @@ export const menuData = {
         "name": "Sữa Chua Hoa Quả",
         "desc": "Trái cây tươi theo mùa cắt hạt lựu hòa mình trong lớp sữa chua chua ngọt đánh thức vị giác.",
         "price": 25000,
-        "image": "",
+        "image": "/suachuahoaqua.webp",
         "category": "yogurt",
         "needsTopping": true
     },
@@ -283,7 +283,7 @@ export const menuData = {
         "name": "Sữa Chua Trân Châu",
         "desc": "Trân châu trắng giòn và trân châu đen dẻo bùi trong sốt sữa chua thanh dịu.",
         "price": 20000,
-        "image": "",
+        "image": "/suachuatranchau.webp",
         "category": "yogurt",
         "needsTopping": true
     }
