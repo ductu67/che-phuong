@@ -13,7 +13,9 @@ import { inject } from '@vercel/analytics';
 
 document.addEventListener('DOMContentLoaded', async () => {
     initCore();
-    inject(); // Initialize Vercel Analytics
+    inject({
+        mode: import.meta.env.PROD ? 'production' : 'development'
+    }); // Initialize Vercel Analytics
     initPWA();
     
     // Tải Dữ liệu từ Google Sheets hoặc Local Data
