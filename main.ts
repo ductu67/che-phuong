@@ -9,9 +9,11 @@ import '@phosphor-icons/web/fill';
 import { initCore } from './src/js/core';
 import { initPWA } from './src/js/pwa';
 import { loadCMSAndRender } from './src/js/cms';
+import { inject } from '@vercel/analytics';
 
 document.addEventListener('DOMContentLoaded', async () => {
     initCore();
+    inject(); // Initialize Vercel Analytics
     initPWA();
     
     // Tải Dữ liệu từ Google Sheets hoặc Local Data
