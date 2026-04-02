@@ -62,8 +62,15 @@ function renderCardsToGrid(menuObj: any) {
         card.dataset.id = item.id;
         
         // Handle mock classes for images if real image URL doesn't exist
-        const imgClass = item.image ? '' : `mock-img-${item.id.replace('che-', '')}`;
-        const imgStyle = item.image ? `style="background-image: url('${item.image}')"` : '';
+        let imgClass = '';
+        let imgStyle = '';
+        if (item.image) {
+            imgStyle = `style="background-image: url('${item.image}')"`;
+        } else if (item.category === 'combos') {
+            imgStyle = `style="display: none;"`; // Hide entirely for combos without image
+        } else {
+            imgClass = `mock-img-${item.id.replace('che-', '')}`;
+        }
 
         card.innerHTML = `
             <div class="card-img ${imgClass}" role="img" aria-label="Hình ảnh ${item.name}" ${imgStyle}></div>
@@ -93,7 +100,7 @@ function renderCardsToGrid(menuObj: any) {
 }
 
 /**
- * Gọi hàm tải CMS
+ * Gọi hàm tải CMS (Có sử dụng Cache localStorage)
  */
 export async function loadCMSAndRender() {
     if (!GOOGLE_SHEET_CSV_URL) {
@@ -102,6 +109,31 @@ export async function loadCMSAndRender() {
         return false;
     }
 
+    const CACHE_KEY = 'che-phuong-cms-data';
+    const CACHE_TTL = 3600 * 1000; // 1 giờ
+    const cachedStr = localStorage.getItem(CACHE_KEY);
+
+    try {
+        if (cachedStr) {
+            const parsedCache = JSON.parse(cachedStr);
+            if (Date.now() - parsedCache.timestamp < CACHE_TTL) {
+                console.log("Sử dụng dữ liệu CMS từ cache...");
+                updateMenuData(parsedCache.data);
+                renderCardsToGrid(parsedCache.data);
+                
+                // Fetch ngầm để cập nhật cache mới nhất cho lần sau
+                setTimeout(() => fetchAndParseCMS(CACHE_KEY, false), 2000);
+                return true;
+            }
+        }
+    } catch (e) {
+        console.warn("Lỗi đọc cache CMS, sẽ tải lại từ mạng.");
+    }
+
+    return await fetchAndParseCMS(CACHE_KEY, true);
+}
+
+async function fetchAndParseCMS(cacheKey: string, doRender: boolean) {
     try {
         const response = await fetch(GOOGLE_SHEET_CSV_URL, { cache: 'no-store' }); // Luôn tải dữ liệu mới nhất
         if (!response.ok) throw new Error("HTTP-Error: " + response.status);
@@ -122,15 +154,24 @@ export async function loadCMSAndRender() {
             };
         });
 
-        // Cập nhật lại kho Data dùng chung
-        updateMenuData(newMenuData);
-        
-        // Render lại giao diện lưới
-        renderCardsToGrid(newMenuData);
+        // Lưu vào cache
+        localStorage.setItem(cacheKey, JSON.stringify({
+            timestamp: Date.now(),
+            data: newMenuData
+        }));
+
+        if (doRender) {
+            // Cập nhật lại kho Data dùng chung
+            updateMenuData(newMenuData);
+            // Render lại giao diện lưới
+            renderCardsToGrid(newMenuData);
+        }
         return true;
     } catch (error) {
         console.error("Lỗi khi kéo Google Sheets CMS:", error);
-        renderCardsToGrid(menuData); // Fallback khi lỗi
+        if (doRender) {
+            renderCardsToGrid(menuData); // Fallback khi lỗi
+        }
         return false; 
     }
 }

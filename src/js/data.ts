@@ -1,4 +1,14 @@
-export const menuData = {
+export interface MenuItem {
+    id: string;
+    name: string;
+    desc: string;
+    price: number;
+    image: string;
+    category: string;
+    needsTopping: boolean;
+}
+
+export const menuData: Record<string, MenuItem> = {
     "combo-song-thanh-thoi": {
         "id": "combo-song-thanh-thoi",
         "name": "Combo Sống Thảnh Thơi",
@@ -289,15 +299,14 @@ export const menuData = {
     }
 };
 
-export function getMenuData(id) {
+export function getMenuData(id: string): MenuItem | null {
     return menuData[id] || null;
 }
 
-export function updateMenuData(newData) {
-    // Xóa ruột cũ
-    for (let key in menuData) {
-        delete menuData[key];
-    }
+export function updateMenuData(newData: Record<string, MenuItem>) {
+    // Xóa ruột cũ một cách an toàn và đảm bảo GC
+    Object.keys(menuData).forEach(key => delete menuData[key]);
+    
     // Chắp vá ruột mới từ Google Sheets
     Object.assign(menuData, newData);
 }

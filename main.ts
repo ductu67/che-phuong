@@ -10,10 +10,12 @@ import { initCore } from './src/js/core';
 import { initPWA } from './src/js/pwa';
 import { loadCMSAndRender } from './src/js/cms';
 import { inject } from '@vercel/analytics';
+import { injectSpeedInsights } from '@vercel/speed-insights';
 
 document.addEventListener('DOMContentLoaded', async () => {
     initCore();
     inject(); // Initialize Vercel Analytics
+    injectSpeedInsights(); // Initialize Vercel Speed Insights
     initPWA();
     
     // Tải Dữ liệu từ Google Sheets hoặc Local Data
@@ -36,6 +38,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => {
             import('./src/js/ui').then(m => m.initUI());
             import('./src/js/cart').then(m => m.initCart());
-        }, 1000);
+        }, 300);
     }
 });
